@@ -176,6 +176,124 @@ class DoublyLinkedList<T> {
   }
 
   /**
+   * Inserts a node at the given index.
+   * @param {T} value - the value of the node to be inserted.
+   * @param {number} index - the index at which the new node is to be inserted.
+   * @returns {boolean} representing whether the insertion succeeded or not.
+   */
+  insert(value: T, index: number): boolean {
+    if (index < 0 || index > this.#length) return false;
+    if (index === 0) return this.unshift(value) && true;
+    if (index === this.#length) return this.push(value) && true;
+
+    const listNode = new ListNode(value);
+    const prevNode = this.get(index - 1);
+    const nextNode = this.get(index);
+
+    /**
+     * Set the prevNode's next value to the new node and
+     * new node's prev value to the previous node.
+     */
+    if (prevNode) {
+      prevNode.next = listNode;
+      listNode.prev = prevNode;
+    }
+
+    /**
+     * Set the nextNode's prev value to the new node and
+     * new node's next value to be nextNode.
+     */
+    if (nextNode) {
+      nextNode.prev = listNode;
+      listNode.next = nextNode;
+    }
+    this.#length += 1;
+    return true;
+  }
+
+  /**
+   * Removes a node at the given index.
+   * @param {number} index - the index at which the node is to be removed.
+   * @returns {ListNode<T> | undefined} the removed node or undefined if the index is invalid.
+   */
+  remove(index: number): ListNode<T> | undefined {
+    if (index < 0 || index >= this.#length) return;
+    if (index === 0) return this.shift();
+    if (index === this.#length - 1) return this.pop();
+
+    const removedNode = this.get(index);
+    const prev = this.get(index - 1);
+    const next = this.get(index + 1);
+
+    /**
+     * Set the next and prev values of the removed node to point to null.
+     */
+    if (removedNode) {
+      removedNode.next = null;
+      removedNode.prev = null;
+    } else return;
+
+    /**
+     * Set the next value of prev to next
+     * and set the prev value of next to prev.
+     * Effectively removing the intended node.
+     */
+    if (prev) prev.next = next || null;
+    if (next) next.prev = prev || null;
+
+    this.#length -= 1;
+    return removedNode;
+  }
+
+  /**
+   * Reverses the list
+   * @returns {DoublyLinkedList<T>} the reversed list.
+   */
+  reverse(): DoublyLinkedList<T> {
+    if (!this.#head) return this;
+
+    this.#tail = this.#head;
+    let current: ListNode<T> | null = this.#head;
+    let prev: ListNode<T> | null = null;
+    let next: ListNode<T> | null;
+
+    while (current) {
+      prev = current.prev;
+      next = current.next;
+
+      current.next = prev;
+      current.prev = next;
+
+      current = next;
+      prev = current;
+    }
+
+    /**
+     * Set the head to prev as current would be pointing to null
+     * when the above loop exits.
+     */
+    this.#head = prev;
+    return this;
+  }
+
+  /**
+   * Returns an array containing all the list node values.
+   * @returns {T[]} an array containing all the list node values.
+   */
+  toArray(): T[] {
+    if (!this.#head) return [];
+
+    const values: T[] = [];
+    let current: ListNode<T> | null = this.#head;
+    while (current) {
+      values.push(current.value);
+      current = current.next;
+    }
+
+    return values;
+  }
+
+  /**
    * @returns {ListNode<T> | null} the head of the linked list.
    */
   get head(): ListNode<T> | null {

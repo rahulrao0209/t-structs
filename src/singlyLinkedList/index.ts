@@ -174,10 +174,11 @@ class SinglyLinkedList<T> {
 
     const listNode = new ListNode(value);
     const prevNode = this.get(index - 1);
-    const oldNext = prevNode!.next;
+    const nextNode = this.get(index);
 
-    prevNode!.next = listNode;
-    listNode.next = oldNext;
+    if (prevNode) prevNode.next = listNode;
+    if (nextNode) listNode.next = nextNode;
+
     this.#length += 1;
     return true;
   }
@@ -233,7 +234,7 @@ class SinglyLinkedList<T> {
   toArray(): T[] {
     if (!this.#head) return [];
 
-    let values: T[] = [];
+    const values: T[] = [];
     let current: ListNode<T> | null = this.#head;
     while (current) {
       values.push(current.value);
