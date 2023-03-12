@@ -2,9 +2,18 @@
   "name": "ds-ts",
   "version": "1.0.0",
   "description": "A library consisting of standard data structures implemented using TypeScript.",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "commonjs",
+  "files": [
+    "/lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rahulrao0209/ds-ts.git"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "tsc"
   },
   "keywords": [
     "data-structures",

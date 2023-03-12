@@ -19,7 +19,16 @@ class SinglyLinkedList<T> {
     this.#length = 0;
   }
 
-  // Todo - Add a create method which accepts an array of values to create a linked list.
+  /**
+   * Appends a list of items/nodes to the list.
+   * @param {T[]} values - list of values to be appended to the list.
+   * @returns {SinglyLinkedList<T>} the list with all the values appended to it.
+   */
+  pushAll(values: T[]): SinglyLinkedList<T> {
+    if (!values.length) return this;
+    values.forEach((value) => this.push(value));
+    return this;
+  }
 
   /**
    * Appends an item/node to the list.
@@ -66,7 +75,7 @@ class SinglyLinkedList<T> {
     this.#tail = prev;
     this.#length -= 1;
 
-    // If the length of the list is 0, set its head and tail to null
+    // If the length of the list is 0, set its head and tail to null.
     if (this.#length === 0) {
       this.#head = null;
       this.#tail = this.#head;
@@ -112,11 +121,125 @@ class SinglyLinkedList<T> {
     return this;
   }
 
-  // Todo - insert method to insert a node at a given index.
-  // Todo - remove method to remove a node from a specified index.
-  // Todo - get method to get the node at a given index.
-  // Todo - set method to update the node at a given index.
-  // Todo - reverse method to reverse a linked list.
+  /**
+   * Get the node at the given index.
+   * @param {number} index - is the index at which the node is returned.
+   * @returns {ListNode<T> | null} the node at the given index.
+   */
+  get(index: number): ListNode<T> | null {
+    if (!this.#head) return null;
+    if (index < 0 || index >= this.#length) return null;
+
+    let counter = 0;
+    let current: ListNode<T> | null = this.#head;
+    while (counter !== index) {
+      if (current) current = current.next;
+      counter += 1;
+    }
+
+    return current;
+  }
+
+  /**
+   * Updates the value of the node at a given index with the new value.
+   * @param {number} index - the index at which the node is to be updated.
+   * @param {T} value - the value with which the node is to be updated.
+   * @returns {boolean} indicating whether the update operation succeeded or not.
+   */
+  set(index: number, value: T): boolean {
+    const listNode = this.get(index);
+    if (!listNode) return false;
+    listNode.value = value;
+    return true;
+  }
+
+  /**
+   * Inserts a node at the given index.
+   * @param {T} value - the value of the node to be inserted.
+   * @param {number} index - the index at which the new node is to be inserted.
+   * @returns {boolean} representing whether the insertion succeeded or not.
+   */
+  insert(value: T, index: number): boolean {
+    if (index < 0 || index > this.#length) return false;
+
+    if (index === 0) {
+      return this.unshift(value) && true;
+    }
+
+    if (index === this.#length) {
+      return this.push(value) && true;
+    }
+
+    const listNode = new ListNode(value);
+    const prevNode = this.get(index - 1);
+    const oldNext = prevNode!.next;
+
+    prevNode!.next = listNode;
+    listNode.next = oldNext;
+    this.#length += 1;
+    return true;
+  }
+
+  /**
+   * Removes a node at the given index.
+   * @param {number} index - the index at which the node is to be removed.
+   * @returns {ListNode<T> | undefined} the removed node or undefined if the index is invalid.
+   */
+  remove(index: number): ListNode<T> | undefined {
+    if (index < 0 || index >= this.#length) return;
+    if (index === 0) return this.shift();
+    if (index === this.#length - 1) return this.pop();
+
+    const prev = this.get(index - 1);
+    const removedNode = prev?.next;
+
+    if (!removedNode) return;
+
+    prev!.next = removedNode?.next || null;
+    this.#length -= 1;
+    return removedNode;
+  }
+
+  /**
+   * Reverses the list.
+   * @returns {SinglyLinkedList<T>} reversed list
+   */
+  reverse(): SinglyLinkedList<T> {
+    if (!this.#head) return this;
+
+    this.#tail = this.#head;
+    let current: ListNode<T> | null = this.#head;
+    let prev: ListNode<T> | null = null;
+    let next: ListNode<T> | null = null;
+
+    while (current) {
+      next = current.next;
+      current.next = prev;
+      prev = current;
+      current = next;
+    }
+
+    // Set the head to prev, as current would be pointing to null as the loop ends.
+    this.#head = prev;
+    return this;
+  }
+
+  /**
+   * Returns an array containing all the list node values.
+   * @returns {T[]} an array containing all the list node values.
+   */
+  toArray(): T[] {
+    if (!this.#head) return [];
+
+    let values: T[] = [];
+    let current: ListNode<T> | null = this.#head;
+    while (current) {
+      values.push(current.value);
+      current = current.next;
+    }
+
+    return values;
+  }
 
   /**
    * @returns {ListNode<T> | null} the head of the linked list.
@@ -133,13 +256,11 @@ class SinglyLinkedList<T> {
   }
 
   /**
-   * @returns  {number} length of the linked list.
+   * @returns {number} length of the linked list.
    */
   get length(): number {
     return this.#length;
   }
-
-  // Todo: Add a toArray method to convert the linked list to an array.
 }
 
 export default SinglyLinkedList;
