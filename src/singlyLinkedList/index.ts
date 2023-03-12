@@ -126,17 +126,19 @@ class SinglyLinkedList<T> {
    * @param {number} index - is the index at which the node is returned.
    * @returns {ListNode<T> | null} the node at the given index.
    */
-  get(index: number): ListNode<T> | null {
-    if (!this.#head) return null;
-    if (index < 0 || index >= this.#length) return null;
+  get(index: number): ListNode<T> | undefined {
+    if (!this.#head) return;
+    if (index < 0 || index >= this.#length) return;
 
     let counter = 0;
     let current: ListNode<T> | null = this.#head;
     while (counter !== index) {
       if (current) current = current.next;
+      else return;
       counter += 1;
     }
 
+    if (!current) return;
     return current;
   }
 
