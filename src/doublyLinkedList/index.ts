@@ -294,6 +294,14 @@ class DoublyLinkedList<T> {
   }
 
   /**
+   * Returns whether the list is empty.
+   * @returns {boolean} true/false based on the list length.
+   */
+  get isEmpty(): boolean {
+    return this.#length === 0;
+  }
+
+  /**
    * @returns {ListNode<T> | null} the head of the linked list.
    */
   get head(): ListNode<T> | null {
