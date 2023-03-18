@@ -228,6 +228,18 @@ class SinglyLinkedList<T> {
   }
 
   /**
+   * Deletes the linked list.
+   * @returns {boolean} whether the list was deleted or not.
+   */
+  delete(): boolean {
+    if (!this.#head) return false;
+    this.#head = null;
+    this.#tail = this.#head;
+    this.#length = 0;
+    return true;
+  }
+
+  /**
    * Returns an array containing all the list node values.
    * @returns {T[]} an array containing all the list node values.
    */
