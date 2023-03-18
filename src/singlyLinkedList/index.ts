@@ -198,7 +198,16 @@ class SinglyLinkedList<T> {
 
     if (!removedNode) return;
 
-    prev!.next = removedNode?.next || null;
+    /**
+     * Set the next value of removed node to point to null.
+     */
+    removedNode.next = null;
+
+    /**
+     * Make the next value of the previous node point to
+     * the next node of the removedNode.
+     */
+    if (prev) prev.next = removedNode.next || null;
     this.#length -= 1;
     return removedNode;
   }

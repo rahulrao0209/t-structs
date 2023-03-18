@@ -145,4 +145,79 @@ describe("Working of Singly Linked List", () => {
     expect(testNode?.value).not.toBe(undefined);
     expect(testNode?.value).toEqual(newValue);
   });
+
+  test("insert method inserts a node at the index passed in as the parameter", () => {
+    const initialLength = list.length;
+    const initialNode = list.get(3);
+
+    expect(initialNode).not.toBe(undefined);
+    expect(initialLength).not.toBe(0);
+
+    /**
+     * Insert a node in position of an existing one.
+     */
+    const newNodeVal = { name: "Italy", capitalCity: "Rome" };
+    list.insert(newNodeVal, 3);
+    expect(initialNode?.value).not.toEqual(newNodeVal);
+    expect(list.get(3)?.value).toEqual(newNodeVal);
+    expect(list.get(3)?.next).toEqual(initialNode);
+    expect(list.length).toBe(initialLength + 1);
+  });
+
+  test("remove method removes a node from the index passed in as parameter", () => {
+    const initialLength = list.length;
+    const initialNode = list.get(2);
+
+    expect(initialLength).not.toBe(0);
+    expect(initialNode).not.toBe(undefined || null);
+
+    /**
+     * Remove a node from index 1
+     */
+    const removedNode = list.remove(2);
+    expect(initialNode?.value).toEqual(removedNode?.value);
+    expect(list.length).toBe(initialLength - 1);
+  });
+
+  test("toArray method returns an array containing values all list nodes", () => {
+    let current = list.head;
+    const values = [];
+    while (current) {
+      values.push(current.value);
+      current = current.next;
+    }
+
+    expect(list.toArray()).toEqual(values);
+  });
+
+  test("reverse method reverses the ordering of the nodes in the list", () => {
+    const initialListValues = list.toArray();
+
+    /**
+     * Reverse the list.
+     */
+    list.reverse();
+    expect(initialListValues).not.toEqual(list.toArray());
+    expect(initialListValues.reverse()).toEqual(list.toArray());
+  });
+
+  test("delete method deletes the list", () => {
+    const initialHead = list.head;
+    const initialLength = list.length;
+
+    expect(initialHead).not.toBe(undefined || null);
+    expect(initialLength).not.toBe(0);
+    expect(list.toArray()).not.toEqual([]);
+
+    /**
+     * Delete the list.
+     */
+    list.delete();
+
+    expect(initialHead).not.toBe(list.head);
+    expect(list.head).toBe(null);
+    expect(list.length).not.toBe(initialLength);
+    expect(list.length).toBe(0);
+    expect(list.toArray()).toEqual([]);
+  });
 });
