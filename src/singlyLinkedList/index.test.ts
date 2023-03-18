@@ -9,7 +9,7 @@ type Country = {
   capitalCity: string;
 };
 
-describe("Working of Singly Linked List", () => {
+describe("Singly Linked List", () => {
   const list = new SinglyLinkedList<Country>();
 
   test("List is initially empty", () => {
