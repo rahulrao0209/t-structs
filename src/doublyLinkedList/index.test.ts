@@ -119,6 +119,12 @@ describe("Doubly Linked List", () => {
     expect(list.length).toBe(initialLength - 1);
   });
 
+  test("pop method returns undefined if the list is empty", () => {
+    if (!list) return;
+    expect(list.isEmpty).toBe(true);
+    expect(list.pop()).toBe(undefined);
+  });
+
   test("unshift method inserts a node at the start of the list", () => {
     if (!list) return;
     const nodeValues = [
@@ -323,5 +329,80 @@ describe("Doubly Linked List", () => {
 
     expect(list.remove(initialLength)).toBe(undefined);
     expect(list.remove(-1)).toBe(undefined);
+  });
+
+  test("toArray method returns an array containing all the list node values", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+    ];
+
+    /**
+     * Append nodes to the list using pushAll method
+     */
+    list.pushAll(nodeValues);
+    expect(list.length).toBe(nodeValues.length);
+    expect(list.toArray()).toEqual(nodeValues);
+  });
+
+  test("toArray returns an empty array if the list is empty", () => {
+    if (!list) return;
+    expect(list.length).toBe(0); // List is initially empty
+    expect(list.toArray()).toEqual([]);
+  });
+
+  test("reverse method reverses the list", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+    ];
+    list.pushAll(nodeValues);
+    expect(list.toArray()).toEqual(nodeValues);
+
+    /**
+     * Reverse the list
+     */
+    list.reverse();
+    expect(list.toArray()).toEqual(nodeValues.reverse());
+  });
+
+  test("reverse returns undefined if the list is empty", () => {
+    if (!list) return;
+    expect(list.isEmpty).toBe(true);
+    expect(list.reverse()).toBe(undefined);
+  });
+
+  test("delete method removes all the nodes in the list", () => {
+    if (!list) return;
+
+    /**
+     * Append nodes to the list using pushAll method
+     */
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+      { name: "Australia", capital: "Canberra" },
+    ];
+    list.pushAll(nodeValues);
+    expect(list.length).toBe(nodeValues.length);
+    expect(list.head?.value).toEqual(nodeValues[0]);
+    expect(list.tail?.value).toEqual(nodeValues[nodeValues.length - 1]);
+
+    /**
+     * Delete all nodes
+     */
+    const isDeleted = list.delete();
+    expect(isDeleted).toBe(true);
+    expect(list.length).toBe(0);
+    expect(list.head).toBe(null);
+    expect(list.tail).toBe(null);
+  });
+
+  test("delete returns false if the list has no nodes", () => {
+    if (!list) return;
+    expect(list.isEmpty).toBe(true);
+    expect(list.delete()).toBe(false);
   });
 });

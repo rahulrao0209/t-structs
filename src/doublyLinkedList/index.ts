@@ -249,14 +249,15 @@ class DoublyLinkedList<T> {
    * Reverses the list
    * @returns {DoublyLinkedList<T>} the reversed list.
    */
-  reverse(): DoublyLinkedList<T> {
-    if (!this.#head) return this;
+  reverse(): DoublyLinkedList<T> | undefined {
+    if (!this.#head) return;
 
     this.#tail = this.#head;
     let current: ListNode<T> | null = this.#head;
     let prev: ListNode<T> | null = null;
     let next: ListNode<T> | null;
 
+    // null <- 1 -> <- 2 -> <- 3 -> null
     while (current) {
       prev = current.prev;
       next = current.next;
@@ -264,8 +265,8 @@ class DoublyLinkedList<T> {
       current.next = prev;
       current.prev = next;
 
-      current = next;
       prev = current;
+      current = next;
     }
 
     /**
