@@ -131,4 +131,86 @@ describe("Doubly Linked List", () => {
     expect(list.head?.value).not.toEqual(nodeValues[0]);
     expect(list.head?.value).toEqual(nodeValue);
   });
+
+  test("shift method removes a node from the start of the list", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "Australia", capital: "Canberra" },
+      { name: "France", capital: "Paris" },
+    ];
+
+    /**
+     * Append nodes onto the list using the pushAll method.
+     */
+    list.pushAll(nodeValues);
+    const initialLength = list.length;
+    expect(list.length).toBe(nodeValues.length);
+    expect(list.head?.value).toEqual(nodeValues[0]);
+
+    /**
+     * Shift a node from the list using shift method.
+     */
+    const shiftedNode = list.shift();
+    expect(list.head?.value).not.toEqual(nodeValues[0]);
+    expect(list.head?.value).toEqual(nodeValues[1]);
+    expect(shiftedNode?.value).toEqual(nodeValues[0]);
+    expect(list.length).toBe(initialLength - 1);
+  });
+
+  test("get method returns the node at the index passed in as a parameter", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+      { name: "Canada", capital: "Ottawa" },
+      { name: "Australia", capital: "Canberra" },
+      { name: "France", capital: "Paris" },
+    ];
+
+    /**
+     * Append a list of the nodes to the list using pushAll method.
+     */
+    list.pushAll(nodeValues);
+    expect(list.length).toBe(nodeValues.length);
+
+    /**
+     * Use the get method to get nodes at specific indexes.
+     */
+    expect(list.get(0)?.value).toEqual(nodeValues[0]);
+    expect(list.get(3)?.value).toEqual(nodeValues[3]);
+    expect(list.get(list.length - 1)?.value).toEqual(
+      nodeValues[nodeValues.length - 1]
+    );
+    expect(list.get(list.length + 1)).toBe(undefined);
+  });
+
+  test("set method updates the value of the node whose index is passed in as a parameter", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+      { name: "Canada", capital: "Ottawa" },
+      { name: "Australia", capital: "Canberra" },
+      { name: "France", capital: "Paris" },
+    ];
+
+    /**
+     * Append a list of nodes to the list using the pushAll method.
+     */
+    list.pushAll(nodeValues);
+
+    /**
+     * Update the value of the third node(index 2)
+     */
+    const initialValue = list.get(2)?.value;
+    const updatedValue = {
+      name: "Germany",
+      capital: "Frankfurt",
+    };
+
+    list.set(2, updatedValue);
+
+    expect(list.get(2)?.value).not.toEqual(initialValue);
+    expect(list.get(2)?.value).toEqual(updatedValue);
+  });
 });
