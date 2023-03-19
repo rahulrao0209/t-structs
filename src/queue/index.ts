@@ -29,7 +29,7 @@ class Queue<T> {
    */
   enqueue(value: T): number {
     if (this.#capacity && this.#size === this.#capacity)
-      this.throwCapacityError();
+      this.#throwCapacityError();
 
     const queueNode = new QueueNode(value);
 
@@ -76,6 +76,22 @@ class Queue<T> {
   }
 
   /**
+   * Returns an array containing all the queue nodes.
+   * @returns {T[]} an array containing all the queue nodes.
+   */
+  toArray(): T[] {
+    if (!this.#start) return [];
+
+    let current: QueueNode<T> | null = this.#start;
+    const values: T[] = [];
+    while (current) {
+      values.push(current.value);
+      current = current.next;
+    }
+    return values;
+  }
+
+  /**
    * @returns {number} the size of the queue.
    */
   get size(): number {
@@ -107,7 +123,7 @@ class Queue<T> {
   /**
    * @throws {Error} capacity error if queue is past assigned capacity.
    */
-  throwCapacityError() {
+  #throwCapacityError() {
     throw new Error("The queue is full. Cannot insert more nodes.");
   }
 }

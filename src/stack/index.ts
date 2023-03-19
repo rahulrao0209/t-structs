@@ -12,11 +12,14 @@ class Stack<T> {
   #top: StackNode<T> | null;
   #bottom: StackNode<T> | null;
   #size: number;
+  #capacity?: number | undefined;
 
-  constructor() {
+  constructor(capacity?: number) {
     this.#top = null;
     this.#bottom = null;
     this.#size = 0;
+
+    if (capacity) this.#capacity = capacity;
   }
 
   /**
@@ -25,6 +28,9 @@ class Stack<T> {
    * @returns {number} the current length of the stack.
    */
   push(value: T): number {
+    if (this.#capacity && this.#capacity === this.#size)
+      this.#throwStackOverflowError();
+
     const stackNode = new StackNode(value);
 
     if (!this.#top) {
@@ -78,11 +84,28 @@ class Stack<T> {
   }
 
   /**
+   * Returns the capacity for the stack if provided.
+   * @returns {number | undefined} the capacity for the stack if provided.
+   */
+  get capacity(): number | undefined {
+    return this.#capacity;
+  }
+
+  /**
    * Returns whether the stack is empty.
    * @returns {boolean} if the stack is empty.
    */
   get isEmpty(): boolean {
     return this.#size === 0;
+  }
+
+  /**
+   * Returns whether the stack is full.
+   * @returns {boolean} whether the stack is full.
+   */
+  get isFull(): boolean {
+    if (!this.#capacity) return false;
+    return this.#capacity === this.#size;
   }
 
   /**
@@ -99,6 +122,12 @@ class Stack<T> {
       current = current.next;
     }
     return values;
+  }
+
+  #throwStackOverflowError() {
+    throw new Error(
+      "Stack Overflow! The stack is full and new nodes cannot be added."
+    );
   }
 }
 
