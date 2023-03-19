@@ -28,6 +28,18 @@ describe("Doubly Linked List", () => {
     expect(list.tail).toBe(null);
   });
 
+  test("isEmpty is false when a node is pushed in", () => {
+    if (!list) return;
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Append a node to the list and verify
+     * that isEmpty reflects value as false.
+     */
+    list.push({ name: "India", capital: "Delhi" });
+    expect(list.isEmpty).toBe(false);
+  });
+
   test("push method appends a node to the list", () => {
     if (!list) return;
     /**
@@ -205,12 +217,111 @@ describe("Doubly Linked List", () => {
     const initialValue = list.get(2)?.value;
     const updatedValue = {
       name: "Germany",
-      capital: "Frankfurt",
+      capital: "Berlin",
     };
 
     list.set(2, updatedValue);
 
     expect(list.get(2)?.value).not.toEqual(initialValue);
     expect(list.get(2)?.value).toEqual(updatedValue);
+  });
+
+  test("insert method inserts a node at a given index.", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+      { name: "Australia", capital: "Canberra" },
+      { name: "France", capital: "Paris" },
+    ];
+
+    /**
+     * Append nodes to the list using pushAll
+     */
+    list.pushAll(nodeValues);
+    const initialLength = list.length;
+    expect(initialLength).toBe(nodeValues.length);
+
+    /**
+     * Insert a node at index 2 using insert method
+     */
+    const initialNode = list.get(2); // { name: "Australia", capital: "Canberra" }
+    expect(initialNode?.value).toEqual({
+      name: "Australia",
+      capital: "Canberra",
+    });
+
+    const newNodeVal = { name: "Italy", capital: "Rome" };
+    list.insert(newNodeVal, 2);
+
+    /**
+     * Test the updated list with the new node value
+     * inserted at index 2
+     */
+    expect(list.length).toBe(initialLength + 1);
+    expect(list.get(2)?.value).not.toEqual(initialNode?.value);
+    expect(list.get(2)?.value).toEqual(newNodeVal);
+    expect(list.get(2)?.next?.value).toEqual(initialNode?.value);
+    expect(list.get(2)?.prev?.value).toEqual(nodeValues[1]);
+  });
+
+  test("insert method returns false if an invalid index is provided as input", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+      { name: "Australia", capital: "Canberra" },
+    ];
+
+    list.pushAll(nodeValues);
+
+    const newNodeVal = { name: "Germany", capital: "Berlin" };
+    expect(list.insert(newNodeVal, list.length + 1)).toBe(false);
+    expect(list.insert(newNodeVal, -2)).toBe(false);
+  });
+
+  test("remove method removes a node at a given index", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+      { name: "Australia", capital: "Canberra" },
+    ];
+
+    /**
+     * Append nodes into the list using pushAll method.
+     */
+    list.pushAll(nodeValues);
+    const initialLength = list.length;
+    expect(initialLength).toBe(nodeValues.length);
+
+    /**
+     * Remove a node using remove method
+     */
+    const removedNode = list.remove(1);
+    expect(list.length).toBe(initialLength - 1);
+    expect(removedNode).not.toBe(undefined);
+    expect(removedNode?.value).toEqual(nodeValues[1]);
+
+    /**
+     * Test that the removed node does not have any
+     * pointers to the next and previous nodes in the list.
+     */
+    expect(removedNode?.next).toBe(null);
+    expect(removedNode?.prev).toBe(null);
+  });
+
+  test("remove method returns undefined if an invalid index is provided", () => {
+    if (!list) return;
+    const nodeValues = [
+      { name: "India", capital: "Delhi" },
+      { name: "U.S", capital: "Washington" },
+    ];
+
+    list.pushAll(nodeValues);
+    const initialLength = list.length;
+
+    expect(list.remove(initialLength)).toBe(undefined);
+    expect(list.remove(-1)).toBe(undefined);
   });
 });
