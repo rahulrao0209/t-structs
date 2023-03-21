@@ -23,6 +23,18 @@ class Stack<T> {
   }
 
   /**
+   * Adds multiple values to the stack at once
+   * @param {T[]} values - an array containing a list of all the values to be added to the stack.
+   * @returns {number | undefined} the size of the stack or undefined based on whether the operation was
+   * successful or not.
+   */
+  pushAll(values: T[]): number | undefined {
+    if (!values.length) return;
+    values.forEach((value: T) => this.push(value));
+    return this.#size;
+  }
+
+  /**
    * Adds an item onto the top of the stack
    * @param {T} value - node/item to be added on top of the stack.
    * @returns {number} the current length of the stack.
