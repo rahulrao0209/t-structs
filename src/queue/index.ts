@@ -9,14 +9,14 @@ class QueueNode<T> {
 }
 
 class Queue<T> {
-  #start: QueueNode<T> | null;
-  #end: QueueNode<T> | null;
+  #front: QueueNode<T> | null;
+  #back: QueueNode<T> | null;
   #size: number;
   #capacity?: number | undefined;
 
   constructor(capacity?: number) {
-    this.#start = null;
-    this.#end = null;
+    this.#front = null;
+    this.#back = null;
     this.#size = 0;
 
     if (capacity) this.#capacity = capacity;
@@ -33,13 +33,13 @@ class Queue<T> {
 
     const queueNode = new QueueNode(value);
 
-    if (!this.#start) {
-      this.#start = queueNode;
-      this.#end = this.#start;
+    if (!this.#front) {
+      this.#front = queueNode;
+      this.#back = this.#front;
     } else {
-      const endNode = this.#end;
+      const endNode = this.#back;
       if (endNode) endNode.next = queueNode;
-      this.#end = queueNode;
+      this.#back = queueNode;
     }
 
     this.#size += 1;
@@ -51,15 +51,15 @@ class Queue<T> {
    * @returns {T | undefined} value of the removed node.
    */
   dequeue(): T | undefined {
-    if (!this.#start) return;
+    if (!this.#front) return;
 
-    const removedNode = this.#start;
+    const removedNode = this.#front;
     if (this.#size === 1) {
-      this.#start = null;
-      this.#end = this.#start;
+      this.#front = null;
+      this.#back = this.#front;
     } else {
       const nextNode = removedNode.next;
-      this.#start = nextNode;
+      this.#front = nextNode;
     }
 
     this.#size -= 1;
@@ -71,8 +71,8 @@ class Queue<T> {
    * @returns {T | undefined} returns the value of the queue's first node.
    */
   peek(): T | undefined {
-    if (!this.#start) return;
-    return this.#start.value;
+    if (!this.#front) return;
+    return this.#front.value;
   }
 
   /**
@@ -80,9 +80,9 @@ class Queue<T> {
    * @returns {T[]} an array containing all the queue nodes.
    */
   toArray(): T[] {
-    if (!this.#start) return [];
+    if (!this.#front) return [];
 
-    let current: QueueNode<T> | null = this.#start;
+    let current: QueueNode<T> | null = this.#front;
     const values: T[] = [];
     while (current) {
       values.push(current.value);
