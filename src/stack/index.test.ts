@@ -1,5 +1,5 @@
 import Stack from "./index";
-import { describe, expect, test, beforeEach, afterEach } from "vitest";
+import { describe, expect, test, beforeEach } from "vitest";
 
 /**
  * Test cases for stack
@@ -40,7 +40,6 @@ describe("Stack", () => {
     /**
      * Add a value to the stack using push.
      */
-
     stack.push({ name: "Google", foundingYear: "1998" });
     expect(stack.size).toBe(initialSize + 1);
   });

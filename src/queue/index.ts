@@ -23,6 +23,18 @@ class Queue<T> {
   }
 
   /**
+   * Enqueues a list of values in the queue.
+   * @param {T[]} values - array of values to be enqueued.
+   * @returns {number} the size of the queue or undefined based on whether the
+   * operation on the queue was successful or not.
+   */
+  enqueueAll(values: T[]): number | undefined {
+    if (!values.length) return;
+    values.forEach((value: T) => this.enqueue(value));
+    return this.#size;
+  }
+
+  /**
    * Appends a node to the queue.
    * @param {T} value - value of the node to be appended.
    * @returns {number} size of the updated queue.
