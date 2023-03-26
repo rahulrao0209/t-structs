@@ -1,22 +1,61 @@
 import SinglyLinkedList from "./index";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, beforeEach } from "vitest";
 
 /**
  * Test cases for Singly Linked List.
  */
-type Country = {
-  name: string;
-  capitalCity: string;
-};
 
 describe("Singly Linked List", () => {
-  const list = new SinglyLinkedList<Country>();
+  type Country = {
+    name: string;
+    capitalCity: string;
+  };
+
+  const values: Country[] = [
+    {
+      name: "India",
+      capitalCity: "Delhi",
+    },
+    {
+      name: "U.S",
+      capitalCity: "Washington",
+    },
+    {
+      name: "U.K",
+      capitalCity: "London",
+    },
+    {
+      name: "France",
+      capitalCity: "Paris",
+    },
+    {
+      name: "Canada",
+      capitalCity: "Ottawa",
+    },
+  ];
+
+  let list: SinglyLinkedList<Country> | undefined;
+
+  beforeEach(() => {
+    list = new SinglyLinkedList<Country>();
+  });
 
   test("List is initially empty", () => {
+    if (!list) return;
     expect(list.isEmpty).toBe(true);
   });
 
   test("push method to add a node to the list", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Add a node to the list using push.
+     */
     list.push({
       name: "India",
       capitalCity: "Delhi",
@@ -25,68 +64,174 @@ describe("Singly Linked List", () => {
     expect(list.isEmpty).toBe(false);
     expect(list.head?.value).toEqual({ name: "India", capitalCity: "Delhi" });
     expect(list.length).toBe(1);
-
-    /**
-     * Delete the list
-     */
-    list.delete();
   });
 
   test("pushAll method to add multiple nodes to the list", () => {
-    list.pushAll([
-      {
-        name: "India",
-        capitalCity: "Delhi",
-      },
-      {
-        name: "U.S",
-        capitalCity: "Washington",
-      },
-      {
-        name: "U.K",
-        capitalCity: "London",
-      },
-      {
-        name: "France",
-        capitalCity: "Paris",
-      },
-      {
-        name: "Canada",
-        capitalCity: "Ottawa",
-      },
-    ]);
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
 
-    expect(list.length).toBe(5);
-    expect(list.head?.value).toEqual({ name: "India", capitalCity: "Delhi" });
-    expect(list.tail?.value).toEqual({
-      name: "Canada",
-      capitalCity: "Ottawa",
-    });
+    /**
+     * Add values/nodes to the list using pushAll.
+     */
+    list.pushAll(values);
+
+    expect(list.length).toBe(values.length);
+    expect(list.head?.value).toEqual(values[0]);
+    expect(list.tail?.value).toEqual(values[values.length - 1]);
   });
 
   test("pop method returns the last node/tail of the list", () => {
-    const tail = list.tail;
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
     const initialLength = list.length;
+    expect(list.length).toBe(initialLength);
+    expect(list.isEmpty).toBe(true);
+    expect(list.head).toBe(null);
+    expect(list.tail).toBe(null);
+
+    /**
+     * Add nodes/values using pushAll.
+     */
+    list.pushAll(values);
+    expect(list.length).toBe(initialLength + values.length);
+
+    const tail = list.tail;
     const poppedNode = list.pop();
+
     expect(poppedNode?.value).toEqual(tail?.value);
-    expect(list.length).toBe(initialLength - 1);
+    expect(list.length).toBe(initialLength + values.length - 1);
+  });
+
+  test("pop method returns undefined if the list is empty", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Using pop on an empty list will return undefined.
+     */
+    expect(list.pop()).toBe(undefined);
+  });
+
+  test("pop method effectively deletes/empties the list if the list has only one node", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Add a single node to the list using push.
+     */
+    list.push(values[0]);
+    expect(list.length).toBe(1);
+    expect(list.isEmpty).toBe(false);
+    expect(list.head?.value).toEqual(values[0]);
+    expect(list.tail?.value).toEqual(values[0]);
+    /**
+     * pop the node
+     */
+    list.pop();
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+    expect(list.head).toBe(null);
+    expect(list.tail).toBe(null);
   });
 
   test("shift method returns the first node/head of the list", () => {
-    const head = list.head;
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
     const initialLength = list.length;
+    expect(list.length).toBe(initialLength);
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Add nodes using pushAll.
+     */
+    list.pushAll(values);
+    expect(list.length).toBe(initialLength + values.length);
+
+    /**
+     * Remove node from the start/head using shift.
+     */
+    const head = list.head;
     const shiftedNode = list.shift();
     expect(shiftedNode).toEqual(head);
-    expect(list.length).toBe(initialLength - 1);
+    expect(list.length).toBe(initialLength + values.length - 1);
+  });
+
+  test("shift method returns undefined if the list is empty", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Using shift on an empty list will return undefined.
+     */
+    expect(list.shift()).toBe(undefined);
+  });
+
+  test("shift method effectively deletes/empties the list if the list has only one node", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Add a single node to the list using push.
+     */
+    list.push(values[0]);
+    expect(list.length).toBe(1);
+    expect(list.isEmpty).toBe(false);
+    expect(list.head?.value).toEqual(values[0]);
+    expect(list.tail?.value).toEqual(values[0]);
+    /**
+     * shift the node
+     */
+    list.shift();
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+    expect(list.head).toBe(null);
+    expect(list.tail).toBe(null);
   });
 
   test("unshift method adds a node at the start of the list", () => {
-    const initialHead = list.head;
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
     const initialLength = list.length;
+    expect(list.length).toBe(initialLength);
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Add nodes using pushAll.
+     */
+    list.pushAll(values);
+    expect(list.length).toBe(initialLength + values.length);
+    expect(list.isEmpty).toBe(false);
 
     /**
      * Add a new node to the start using unshift
      */
+    const initialHead = list.head;
     list.unshift({
       name: "Australia",
       capitalCity: "Canberra",
@@ -100,22 +245,61 @@ describe("Singly Linked List", () => {
       name: "Australia",
       capitalCity: "Canberra",
     });
-    expect(list.length).toBe(initialLength + 1);
+    expect(list.length).toBe(initialLength + values.length + 1);
+  });
+
+  test("unshift method adds an initial/first node to the list if the list is empty", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty.
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+    expect(list.head).toBe(null);
+    expect(list.tail).toBe(null);
+
+    /**
+     * Add a node at the head using unshift
+     */
+    list.unshift(values[0]);
+    expect(list.length).toBe(1);
+    expect(list.isEmpty).toBe(false);
+    expect(list.head).not.toBe(null);
+    expect(list.tail).not.toBe(null);
+    expect(list.head?.value).toEqual(list.tail?.value);
   });
 
   test("get method returns the correct node based on the index being passed as a parameter", () => {
+    if (!list) return;
     /**
-     * Based on the current state of the list,
-     * the node {name: 'U.K' capital: 'London'} should be at index 2
+     * Initially the list is empty.
      */
+    const initialLength = list.length;
+    expect(list.length).toBe(initialLength);
+    expect(list.isEmpty).toBe(true);
 
-    expect(list.get(2)?.value).toEqual({
-      name: "U.K",
-      capitalCity: "London",
-    });
+    /**
+     * Add nodes to the list using pushAll.
+     */
+    list.pushAll(values);
+    expect(list.length).toBe(initialLength + values.length);
+    expect(list.isEmpty).toBe(false);
+
+    expect(list.get(2)?.value).toEqual(values[2]);
   });
 
   test("get method returns undefined if we pass in an index value which does not exist", () => {
+    if (!list) return;
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+    /**
+     * Add nodes to the list using pushAll.
+     */
+    list.pushAll(values);
+    expect(list.length).toBe(values.length);
+    expect(list.isEmpty).toBe(false);
+    expect(list.get(2)).not.toBe(undefined);
+
     /**
      * get method should return undefined if pass in an index as a negative value,
      * or an index with value higher than the list length.
@@ -125,6 +309,18 @@ describe("Singly Linked List", () => {
   });
 
   test("set method updates the value of the node at the index being passed as a parameter", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty
+     */
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Add nodes to the list using pushAll
+     */
+    list.pushAll(values);
+    expect(list.isEmpty).toBe(false);
+
     const testNode = list.get(2);
     const newValue = {
       name: "Spain",
@@ -147,11 +343,23 @@ describe("Singly Linked List", () => {
   });
 
   test("insert method inserts a node at the index passed in as the parameter", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty
+     */
     const initialLength = list.length;
-    const initialNode = list.get(3);
+    expect(initialLength).toBe(0);
+    expect(list.isEmpty).toBe(true);
 
+    /**
+     * Add new nodes to the list using pushAll
+     */
+    list.pushAll(values);
+    expect(list.length).toBe(initialLength + values.length);
+    expect(list.isEmpty).toBe(false);
+
+    const initialNode = list.get(3);
     expect(initialNode).not.toBe(undefined);
-    expect(initialLength).not.toBe(0);
 
     /**
      * Insert a node in position of an existing one.
@@ -161,51 +369,113 @@ describe("Singly Linked List", () => {
     expect(initialNode?.value).not.toEqual(newNodeVal);
     expect(list.get(3)?.value).toEqual(newNodeVal);
     expect(list.get(3)?.next).toEqual(initialNode);
-    expect(list.length).toBe(initialLength + 1);
+    expect(list.length).toBe(initialLength + values.length + 1);
   });
 
   test("remove method removes a node from the index passed in as parameter", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty
+     */
     const initialLength = list.length;
-    const initialNode = list.get(2);
-
-    expect(initialLength).not.toBe(0);
-    expect(initialNode).not.toBe(undefined || null);
+    const testIndex = 2;
+    expect(initialLength).toBe(0);
+    expect(list.isEmpty).toBe(true);
 
     /**
-     * Remove a node from index 1
+     * Add new nodes to the list using pushAll
      */
-    const removedNode = list.remove(2);
+    list.pushAll(values);
+    expect(list.length).toBe(initialLength + values.length);
+    expect(list.isEmpty).toBe(false);
+
+    const initialNode = list.get(testIndex);
+    expect(initialNode).not.toBe(undefined);
+
+    /**
+     * Remove a node from a given index.
+     */
+    const removedNode = list.remove(testIndex);
     expect(initialNode?.value).toEqual(removedNode?.value);
-    expect(list.length).toBe(initialLength - 1);
+    expect(list.length).toBe(initialLength + values.length - 1);
+  });
+
+  test("remove method returns undefined if an invalid index is passed or if the list is empty", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty
+     */
+    const initialLength = list.length;
+    expect(initialLength).toBe(0);
+    expect(list.isEmpty).toBe(true);
+    expect(list.remove(2)).toBe(undefined);
+
+    /**
+     * Add nodes using pushAll
+     */
+    list.pushAll(values);
+    expect(list.length).toBe(values.length);
+    expect(list.isEmpty).toBe(false);
+
+    /**
+     * Use an invalid index (Negative value or a value larger than the list length)
+     */
+    expect(list.remove(-2)).toBe(undefined);
+    expect(list.remove(list.length)).toBe(undefined);
   });
 
   test("toArray method returns an array containing values all list nodes", () => {
-    let current = list.head;
-    const values = [];
-    while (current) {
-      values.push(current.value);
-      current = current.next;
-    }
-
+    if (!list) return;
+    /**
+     * Add nodes to the list using pushAll.
+     */
+    list.pushAll(values);
     expect(list.toArray()).toEqual(values);
   });
 
+  test("toArray method returns an empty array if the list is empty", () => {
+    if (!list) return;
+    /**
+     * Initially the list is empty
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+
+    expect(list.toArray()).toEqual([]);
+  });
+
   test("reverse method reverses the ordering of the nodes in the list", () => {
-    const initialListValues = list.toArray();
+    if (!list) return;
+    /**
+     * Initially the list is empty
+     */
+    expect(list.length).toBe(0);
+    expect(list.isEmpty).toBe(true);
+
+    /**
+     * Add values to the list using the pushAll method.
+     */
+    list.pushAll(values);
 
     /**
      * Reverse the list.
      */
     list.reverse();
-    expect(initialListValues).not.toEqual(list.toArray());
-    expect(initialListValues.reverse()).toEqual(list.toArray());
+    expect(values).not.toEqual(list.toArray());
+    expect(values.reverse()).toEqual(list.toArray());
   });
 
   test("delete method deletes the list", () => {
+    if (!list) return;
+    /**
+     * Add values to the list using the pushAll method.
+     */
+    list.pushAll(values);
+
     const initialHead = list.head;
     const initialLength = list.length;
 
-    expect(initialHead).not.toBe(undefined || null);
+    expect(initialHead).not.toBe(undefined);
     expect(initialLength).not.toBe(0);
     expect(list.toArray()).not.toEqual([]);
 

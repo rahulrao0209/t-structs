@@ -59,6 +59,17 @@ class SinglyLinkedList<T> {
   pop(): ListNode<T> | undefined {
     if (!this.#head) return;
 
+    const poppedNode = this.#tail;
+    if (!poppedNode) return;
+
+    // Check if there is only one node in the list.
+    if (poppedNode && this.#length === 1) {
+      this.#head = null;
+      this.#tail = this.#head;
+      this.#length -= 1;
+      return poppedNode;
+    }
+
     let current = this.#head;
     let prev: ListNode<T> | null = null;
 
@@ -68,18 +79,12 @@ class SinglyLinkedList<T> {
       current = current.next;
     }
 
-    // Set prev.next to null, effectively making it to be the last node in the list.
-    if (prev && prev.next) {
+    // Set prev.next to null, effectively making it the last node in the list.
+    if (prev) {
       prev.next = null;
     }
     this.#tail = prev;
     this.#length -= 1;
-
-    // If the length of the list is 0, set its head and tail to null.
-    if (this.#length === 0) {
-      this.#head = null;
-      this.#tail = this.#head;
-    }
     return current;
   }
 
@@ -132,9 +137,8 @@ class SinglyLinkedList<T> {
 
     let counter = 0;
     let current: ListNode<T> | null = this.#head;
-    while (counter !== index) {
-      if (current) current = current.next;
-      else return;
+    while (current && counter !== index) {
+      current = current.next;
       counter += 1;
     }
 
