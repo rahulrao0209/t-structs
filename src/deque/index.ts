@@ -25,8 +25,8 @@ class Deque<T> {
 
   /**
    * Appends a value at the back/end of the deque.
-   * @param value
-   * @returns
+   * @param {T} value of the node to be appended.
+   * @returns {number} the size of the updated deque.
    */
   append(value: T): number {
     if (this.#capacity && this.#size === this.#capacity)
@@ -55,10 +55,10 @@ class Deque<T> {
 
   /**
    * Adds/Prepends a value at the front/start of the queue.
-   * @param value
-   * @returns
+   * @param {T} value of the node to be prepended.
+   * @returns {number} the size of the updated deque.
    */
-  prepend(value: T) {
+  prepend(value: T): number {
     if (this.#capacity && this.#size === this.#capacity)
       this.#throwCapacityError();
 
