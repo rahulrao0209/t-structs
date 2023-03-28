@@ -23,11 +23,60 @@ class Deque<T> {
     if (capacity) this.#capacity = capacity;
   }
 
-  // TODO: Add element/node at the back.
-  append() {}
+  /**
+   * Appends a value at the back/end of the deque.
+   * @param value
+   * @returns
+   */
+  append(value: T): number {
+    if (this.#capacity && this.#size === this.#capacity)
+      this.#throwCapacityError();
 
-  // TODO: Add element/node at the front.
-  prepend() {}
+    const dequeNode = new DequeNode(value);
+
+    /**
+     * If this is the first node to be added.
+     */
+    if (!this.#front) {
+      this.#front = dequeNode;
+      this.#back = this.#front;
+    } else {
+      const backNode = this.#back;
+      if (backNode) {
+        backNode.next = dequeNode;
+        dequeNode.prev = backNode;
+        this.#back = dequeNode;
+      } else return this.#size;
+    }
+
+    this.#size += 1;
+    return this.#size;
+  }
+
+  /**
+   * Adds/Prepends a value at the front/start of the queue.
+   * @param value
+   * @returns
+   */
+  prepend(value: T) {
+    if (this.#capacity && this.#size === this.#capacity)
+      this.#throwCapacityError();
+
+    const dequeNode = new DequeNode(value);
+
+    if (!this.#front) this.append(value);
+    else {
+      const frontNode = this.#front;
+      if (frontNode) {
+        frontNode.prev = dequeNode;
+        dequeNode.next = frontNode;
+        this.#front = dequeNode;
+      } else return this.#size;
+    }
+
+    this.#size += 1;
+    return this.#size;
+  }
 
   // TODO: Remove element/node at the back.
   pop() {}
@@ -81,5 +130,12 @@ class Deque<T> {
    */
   get capacity(): number | undefined {
     if (this.#capacity) return this.#capacity;
+  }
+
+  /**
+   * @throws {Error} capacity error if deque is past assigned capacity.
+   */
+  #throwCapacityError() {
+    throw new Error("The deque is full. Cannot insert more nodes.");
   }
 }
