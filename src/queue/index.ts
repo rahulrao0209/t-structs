@@ -25,7 +25,7 @@ class Queue<T> {
   /**
    * Enqueues a list of values in the queue.
    * @param {T[]} values - array of values to be enqueued.
-   * @returns {number} the size of the queue or undefined based on whether the
+   * @returns {number | undefined} the size of the queue or undefined based on whether the
    * operation on the queue was successful or not.
    */
   enqueueAll(values: T[]): number | undefined {

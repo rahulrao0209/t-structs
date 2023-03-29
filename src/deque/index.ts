@@ -24,6 +24,29 @@ class Deque<T> {
   }
 
   /**
+   * Appends a list of values at the back/end of the deque.
+   * @param {T[]} values to be appended.
+   * @returns {number | undefined} the size of the updated deque or
+   * undefined depending on whether the operation was successful or not.
+   */
+  appendAll(values: T[]): number | undefined {
+    if (!values.length) return;
+    values.forEach((value: T) => this.append(value));
+    return this.#size;
+  }
+
+  /**
+   * Prepends a list of values at the front/start of the deque.
+   * @param {T[]} values to be prepended.
+   * @returns {number | undefined} the size of updated deque or undefined
+   * depending on whether the operation was successful or not.
+   */
+  prependAll(values: T[]): number | undefined {
+    if (!values.length) return;
+    values.forEach((value: T) => this.prepend(value));
+  }
+
+  /**
    * Appends a value at the back/end of the deque.
    * @param {T} value of the node to be appended.
    * @returns {number} the size of the updated deque.
@@ -78,11 +101,59 @@ class Deque<T> {
     return this.#size;
   }
 
-  // TODO: Remove element/node at the back.
-  pop() {}
+  /**
+   * Remove and return the value of the back/end of the deque.
+   * @returns {T | undefined} the value of the element at the back/end
+   * of the deque or undefined if the deque is empty.
+   */
+  pop(): T | undefined {
+    if (!this.#front) return;
+    const poppedNode = this.#back;
 
-  // TODO: Remove element/node at the front.
-  shift() {}
+    /**
+     * Check if this is the only node in the deque.
+     */
+    if (this.#size === 1) {
+      this.#front = null;
+      this.#back = this.#front;
+    } else {
+      const prevNode = poppedNode?.prev;
+      if (prevNode) {
+        prevNode.next = null;
+        this.#back = prevNode;
+      }
+    }
+
+    this.#size -= 1;
+    return poppedNode?.value;
+  }
+
+  /**
+   * Remove and return the value of element at the front/start of the deque.
+   * @returns {T | undefined} value of element at the front/start of the deque
+   * or undefined if the deque is empty
+   */
+  shift(): T | undefined {
+    if (!this.#front) return;
+    const shiftedNode = this.#front;
+
+    /**
+     * Check if this is the only node in the deque.
+     */
+    if (this.#size === 1) {
+      this.#front = null;
+      this.#back = this.#front;
+    } else {
+      const nextNode = shiftedNode.next;
+      if (nextNode) {
+        nextNode.prev = null;
+        this.#front = nextNode;
+      }
+    }
+
+    this.#size -= 1;
+    return shiftedNode.value;
+  }
 
   /**
    * @returns {T | undefined} the value of the element
