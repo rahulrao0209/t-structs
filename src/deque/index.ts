@@ -44,6 +44,7 @@ class Deque<T> {
   prependAll(values: T[]): number | undefined {
     if (!values.length) return;
     values.forEach((value: T) => this.prepend(value));
+    return this.#size;
   }
 
   /**
@@ -87,8 +88,10 @@ class Deque<T> {
 
     const dequeNode = new DequeNode(value);
 
-    if (!this.#front) this.append(value);
-    else {
+    if (!this.#front) {
+      this.append(value);
+      return this.#size;
+    } else {
       const frontNode = this.#front;
       if (frontNode) {
         frontNode.prev = dequeNode;
