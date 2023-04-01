@@ -156,6 +156,23 @@ class Deque<T> {
   }
 
   /**
+   * Returns an array containing the values of all elements in the deque.
+   * @returns {T[]} an array containing all the values in the deque.
+   */
+  toArray(): T[] {
+    if (!this.#front) return [];
+
+    let current: DequeNode<T> | null = this.#front;
+    const values: T[] = [];
+
+    while (current) {
+      values.push(current.value);
+      current = current.next;
+    }
+    return values;
+  }
+
+  /**
    * @returns {T | undefined} the value of the element
    * at the front of the deque or undefined if the
    * deque is empty.
@@ -210,3 +227,5 @@ class Deque<T> {
     throw new Error("The deque is full. Cannot insert more nodes.");
   }
 }
+
+export default Deque;
