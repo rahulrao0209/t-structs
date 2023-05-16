@@ -1,20 +1,25 @@
 import BinaryHeap from "../index";
-import { CompareFunc } from "../../utils";
+import { CompareFunc, defaultCompare } from "../../utils/index";
 
 class MaxHeap<T> extends BinaryHeap<T> {
-  constructor() {
-    super();
+  constructor(
+    values: Iterable<T> = [],
+    compare: CompareFunc<T> = defaultCompare
+  ) {
+    super(values, compare);
   }
 
   /**
    * Returns whether an element/value is correctly placed in the heap.
-   * @param {number} parentIdx
-   * @param {number} childIdx
+   * @param {number} parentIndex
+   * @param {number} childIndex
    * @returns {boolean}
    */
-  protected isCorrectlyPlaced(parentIdx: number, childIdx: number): boolean {
-    // return this.heap[parentIdx] >= this.heap[childIdx];
-    return this.compare(this.heap[parentIdx], this.heap[childIdx]) >= 0;
+  protected isCorrectlyPlaced(
+    parentIndex: number,
+    childIndex: number
+  ): boolean {
+    return this.compare(this.heap[parentIndex], this.heap[childIndex]) >= 0;
   }
 
   /**
@@ -29,7 +34,7 @@ class MaxHeap<T> extends BinaryHeap<T> {
     rightChildIndex: number
   ): number {
     return this.compare(this.heap[leftChildIndex], this.heap[rightChildIndex]) >
-      0
+      0 || rightChildIndex >= this.size
       ? leftChildIndex
       : rightChildIndex;
   }

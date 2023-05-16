@@ -1,6 +1,12 @@
 import BinaryHeap from "../index";
 
 class MinHeap<T> extends BinaryHeap<T> {
+  protected getChildIndexToSwap(
+    leftChildIndex: number,
+    rightChildIndex: number
+  ): number {
+    throw new Error("Method not implemented.");
+  }
   constructor() {
     super();
   }

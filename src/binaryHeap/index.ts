@@ -1,15 +1,16 @@
 import { CompareFunc, defaultCompare } from "../utils/index";
 
 abstract class BinaryHeap<T> {
-  protected heap: T[];
+  protected heap: T[] = [];
   protected compare: CompareFunc<T>;
 
   constructor(
     values: Iterable<T> = [],
     compare: CompareFunc<T> = defaultCompare
   ) {
-    this.heap = Array.from(values);
     this.compare = compare;
+    const initialValues = Array.from(values);
+    initialValues.length && this.insertAll(initialValues);
   }
 
   /**
@@ -39,9 +40,9 @@ abstract class BinaryHeap<T> {
 
   /**
    * Maintain the heap invariant after a new element has been added.
-   * @param {number} index
    */
-  protected swimUp(index: number): void {
+  protected swimUp(): void {
+    let index = this.size - 1;
     let parentIndex: number;
 
     /**
@@ -49,7 +50,7 @@ abstract class BinaryHeap<T> {
      * and keep looping until the index is not zero.
      */
     while (index > 0) {
-      parentIndex = Math.floor((index - 1) / 2);
+      parentIndex = this.getParentIndex(index);
       if (this.isCorrectlyPlaced(parentIndex, index)) break;
       this.swap(parentIndex, index);
       index = parentIndex;
@@ -58,21 +59,91 @@ abstract class BinaryHeap<T> {
 
   /**
    * Maintain the heap invariant after the top element has been extracted.
-   * @param {number} index
    */
-  protected sinkDown(index: number): void {
-    if (index >= this.heap.length) return;
-    let leftChildindex = this.getLeftChildIndex(index);
-    let rightChildindex = this.getRightChildIndex(index);
+  protected sinkDown(): void {
+    let index = 0;
+    let leftChildIndex: number;
+    let rightChildIndex: number;
     let childIndexToSwap: number;
+
+    while (index <= this.size - 1) {
+      leftChildIndex = this.getLeftChildIndex(index);
+      rightChildIndex = this.getRightChildIndex(index);
+
+      // If both the child indexes are out of bounds return
+      if (
+        this.isIndexOutOfBounds(leftChildIndex) &&
+        this.isIndexOutOfBounds(rightChildIndex)
+      )
+        return;
+
+      // If left child index is out of bounds compare with only the right one
+      if (this.isIndexOutOfBounds(leftChildIndex)) {
+        if (this.isCorrectlyPlaced(index, rightChildIndex)) return;
+        this.swap(index, rightChildIndex);
+        index = rightChildIndex;
+        continue;
+      }
+
+      // If right child index is out of bounds compare with only the left one
+      if (this.isIndexOutOfBounds(rightChildIndex)) {
+        if (this.isCorrectlyPlaced(index, leftChildIndex)) return;
+        this.swap(index, leftChildIndex);
+        index = leftChildIndex;
+        continue;
+      }
+
+      // If the parent is larger than both the children return
+      if (
+        this.isCorrectlyPlaced(index, leftChildIndex) &&
+        this.isCorrectlyPlaced(index, rightChildIndex)
+      )
+        return;
+
+      // Sink down
+      childIndexToSwap = this.getChildIndexToSwap(
+        leftChildIndex,
+        rightChildIndex
+      );
+      this.swap(index, childIndexToSwap);
+      index = childIndexToSwap;
+    }
   }
 
+  /**
+   * Gets the index of the parent
+   * @param {number} index
+   * @returns {number}
+   */
+  protected getParentIndex(index: number): number {
+    return Math.floor((index - 1) / 2);
+  }
+
+  /**
+   * Gets the index of the left child
+   * @param {number} index
+   * @returns {number}
+   */
   protected getLeftChildIndex(index: number): number {
     return 2 * index + 1;
   }
 
+  /**
+   * Gets the index of the right child
+   * @param {number} index
+   * @returns {number}
+   */
   protected getRightChildIndex(index: number): number {
     return this.getLeftChildIndex(index) + 1;
+  }
+
+  /**
+   * Checks whether a given index is out of bounds
+   * @param {number} index
+   * @returns {boolean}
+   */
+  protected isIndexOutOfBounds(index: number): boolean {
+    return index >= this.size;
   }
 
   /**
@@ -101,7 +172,7 @@ abstract class BinaryHeap<T> {
    */
   insert(value: T) {
     this.heap.push(value);
-    this.swimUp(this.heap.length - 1);
+    this.swimUp();
   }
 
   /**
@@ -116,8 +187,29 @@ abstract class BinaryHeap<T> {
   /**
    * Remove the element/value at the top of the heap and return it.
    */
-  poll(): T | undefined {
-    return;
+  extract(): T | undefined {
+    if (this.size === 0) return;
+
+    // Edge case when only 2 elements are present.
+    if (this.size === 2) {
+      const priorityElement1 = this.heap[0];
+      const priorityElement2 = this.heap[1];
+      let extractedValue: T;
+      if (this.compare(priorityElement1, priorityElement2)) {
+        extractedValue = this.heap[0];
+        this.heap.splice(0, 1);
+      } else {
+        extractedValue = this.heap[1];
+        this.heap.splice(1, 1);
+      }
+
+      return extractedValue;
+    }
+
+    this.swap(0, this.size - 1);
+    const extractedValue = this.heap.pop();
+    this.sinkDown();
+    return extractedValue;
   }
 
   /**
@@ -134,7 +226,7 @@ abstract class BinaryHeap<T> {
    * @returns {boolean}
    */
   isEmpty(): boolean {
-    return this.heap.length === 0;
+    return this.size === 0;
   }
 
   /**
