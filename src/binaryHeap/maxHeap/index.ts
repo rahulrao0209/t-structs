@@ -11,6 +11,8 @@ class MaxHeap<T> extends BinaryHeap<T> {
 
   /**
    * Returns whether an element/value is correctly placed in the heap.
+   * In a maxHeap, the element at the parent index should always be larger
+   * than the element at the child indexes.
    * @param {number} parentIndex
    * @param {number} childIndex
    * @returns {boolean}

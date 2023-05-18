@@ -1,4 +1,4 @@
-import { MaxHeap } from "./src/index";
+import { MaxHeap, MinHeap } from "./src/index";
 
 // const heap = new MaxHeap([22, 33, 45, 21]);
 // console.log("max heap size: ", heap.size);
@@ -61,6 +61,11 @@ const heap2 = new MaxHeap<Population>(
   comp
 );
 
+const heap3 = new MinHeap<Population>(
+  [chi, usa, ind, england, spain, germany, italy, aus],
+  comp
+);
+
 console.log("max heap size: ", heap2.size);
 console.log("max heap data: ", heap2.heapData);
 
@@ -80,6 +85,22 @@ console.log("Extract: ", heap2.extract());
 console.log("Extract: ", heap2.extract());
 console.log("Extract: ", heap2.extract());
 
+console.log("Peek: ", heap3.peek());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+console.log("Extract: ", heap3.extract());
+
 const maxBinaryHeap = new MaxHeap([0, 1, 2, 3, 4, 5, 6, 7]);
 
 console.log(maxBinaryHeap.heapData);
@@ -92,3 +113,16 @@ console.log(maxBinaryHeap.extract());
 console.log(maxBinaryHeap.extract());
 console.log(maxBinaryHeap.extract());
 console.log(maxBinaryHeap.heapData);
+
+const maxBinaryHeap2 = new MaxHeap([0, 1, 2, 3, 4, 5, 6, 7]);
+
+console.log(maxBinaryHeap2.heapData);
+console.log(maxBinaryHeap2.extract());
+console.log(maxBinaryHeap2.extract());
+console.log(maxBinaryHeap2.extract());
+console.log(maxBinaryHeap2.extract());
+console.log(maxBinaryHeap2.extract());
+console.log(maxBinaryHeap2.extract());
+console.log(maxBinaryHeap2.extract());
+console.log(maxBinaryHeap2.extract());
+console.log(maxBinaryHeap2.heapData);
