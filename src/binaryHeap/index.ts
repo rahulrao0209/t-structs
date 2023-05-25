@@ -190,22 +190,6 @@ abstract class BinaryHeap<T> {
   extract(): T | undefined {
     if (this.size === 0) return;
 
-    // Edge case when only 2 elements are present.
-    if (this.size === 2) {
-      const priorityElement1 = this.heap[0];
-      const priorityElement2 = this.heap[1];
-      let extractedValue: T;
-      if (this.compare(priorityElement1, priorityElement2)) {
-        extractedValue = this.heap[0];
-        this.heap.splice(0, 1);
-      } else {
-        extractedValue = this.heap[1];
-        this.heap.splice(1, 1);
-      }
-
-      return extractedValue;
-    }
-
     this.swap(0, this.size - 1);
     const extractedValue = this.heap.pop();
     this.sinkDown();
