@@ -149,4 +149,52 @@ describe("MaxHeap", () => {
     expect(numHeap.size).toBe(nums.length);
     expect(numHeap.peek()).toBe(111);
   });
+
+  test("extract method removes and returns the top element in the heap", () => {
+    maxHeap = new MaxHeap<Company>(values, compare);
+
+    const initialSize = maxHeap.size;
+    expect(maxHeap.isEmpty()).toBe(false);
+    expect(initialSize).toBe(values.length);
+
+    expect(maxHeap.extract()).toEqual({
+      name: "Atlassian",
+      foundingYear: "2002",
+    });
+    expect(maxHeap.size).toBe(values.length - 1);
+
+    expect(maxHeap.extract()).toEqual({ name: "Google", foundingYear: "1998" });
+    expect(maxHeap.size).toBe(values.length - 2);
+
+    expect(maxHeap.extract()).toEqual({ name: "Amazon", foundingYear: "1994" });
+    expect(maxHeap.size).toBe(values.length - 3);
+
+    expect(maxHeap.extract()).toEqual({ name: "Apple", foundingYear: "1976" });
+    expect(maxHeap.size).toBe(values.length - 4);
+
+    expect(maxHeap.extract()).toEqual({
+      name: "Microsoft",
+      foundingYear: "1975",
+    });
+    expect(maxHeap.size).toBe(0);
+    expect(maxHeap.isEmpty()).toBe(true);
+
+    /* Check extract method for primitive values */
+    const nums = [5, 24, 22, 111, 2, 6];
+    const numHeap = new MaxHeap(nums);
+
+    expect(numHeap.isEmpty()).toBe(false);
+    expect(numHeap.size).toBe(nums.length);
+
+    /* Extract all values one by one */
+    expect(numHeap.extract()).toBe(111);
+    expect(numHeap.extract()).toBe(24);
+    expect(numHeap.extract()).toBe(22);
+    expect(numHeap.extract()).toBe(6);
+    expect(numHeap.extract()).toBe(5);
+    expect(numHeap.extract()).toBe(2);
+
+    expect(numHeap.size).toBe(0);
+    expect(numHeap.isEmpty()).toBe(true);
+  });
 });
