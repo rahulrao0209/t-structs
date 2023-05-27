@@ -1,12 +1,18 @@
 import BinaryHeap from "../index";
-import { CompareFunc, defaultCompare } from "../../utils/index";
+import {
+  CompareFunc,
+  EqualsFunc,
+  defaultCompare,
+  defaultEquals,
+} from "../../utils/index";
 
 class MaxHeap<T> extends BinaryHeap<T> {
   constructor(
     values: Iterable<T> = [],
-    compare: CompareFunc<T> = defaultCompare
+    compare: CompareFunc<T> = defaultCompare,
+    equals: EqualsFunc<T> = defaultEquals
   ) {
-    super(values, compare);
+    super(values, compare, equals);
   }
 
   /**

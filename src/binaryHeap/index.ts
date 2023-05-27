@@ -1,14 +1,22 @@
-import { CompareFunc, defaultCompare } from "../utils/index";
+import {
+  CompareFunc,
+  EqualsFunc,
+  defaultCompare,
+  defaultEquals,
+} from "../utils/index";
 
 abstract class BinaryHeap<T> {
   protected heap: T[] = [];
   protected compare: CompareFunc<T>;
+  protected equals: EqualsFunc<T>;
 
   constructor(
     values: Iterable<T> = [],
-    compare: CompareFunc<T> = defaultCompare
+    compare: CompareFunc<T> = defaultCompare,
+    equals: EqualsFunc<T> = defaultEquals
   ) {
     this.compare = compare;
+    this.equals = equals;
     const initialValues = Array.from(values);
     initialValues.length && this.insertAll(initialValues);
   }
@@ -202,7 +210,8 @@ abstract class BinaryHeap<T> {
    * @returns {boolean}
    */
   contains(element: T): boolean {
-    return this.heap.includes(element);
+    if (this.heap.find((ele) => this.equals(element, ele))) return true;
+    return false;
   }
 
   /**
