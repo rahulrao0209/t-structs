@@ -3,7 +3,7 @@ import {
   EqualsFunc,
   defaultCompare,
   defaultEquals,
-} from "../utils/index";
+} from "../../utils";
 
 abstract class BinaryHeap<T> {
   protected heap: T[] = [];
@@ -209,7 +209,7 @@ abstract class BinaryHeap<T> {
    * @param {T} element
    * @returns {boolean}
    */
-  contains(element: T): boolean {
+  has(element: T): boolean {
     if (this.heap.find((ele) => this.equals(element, ele))) return true;
     return false;
   }

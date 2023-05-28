@@ -4,7 +4,7 @@ import {
   EqualsFunc,
   defaultCompare,
   defaultEquals,
-} from "../../utils/index";
+} from "../../../utils/index";
 
 class MaxHeap<T> extends BinaryHeap<T> {
   constructor(

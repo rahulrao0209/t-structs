@@ -1,5 +1,5 @@
 import MaxHeap from "./index";
-import { EqualsFunc, defaultCompare, defaultEquals } from "../../utils";
+import { EqualsFunc } from "../../../utils";
 import { describe, expect, test, beforeEach } from "vitest";
 
 /**
@@ -66,14 +66,14 @@ describe("MaxHeap", () => {
     expect(maxHeap.size).toBe(values.length);
   });
 
-  test("contains method returns whether an element/value is present in the heap", () => {
+  test("has method returns whether an element/value is present in the heap", () => {
     maxHeap = new MaxHeap<Company>(values, compare, equals);
 
     /**
      * Check that a given value exists in the heap.
      */
     expect(
-      maxHeap.contains({
+      maxHeap.has({
         name: "Atlassian",
         foundingYear: "2002",
       })
@@ -83,18 +83,18 @@ describe("MaxHeap", () => {
      * Check that a given value does not exist in the heap.
      */
     expect(
-      maxHeap.contains({
+      maxHeap.has({
         name: "TCS",
         foundingYear: "1968",
       })
     ).toBe(false);
 
     /**
-     * Check contains method for primitive types
+     * Check has method for primitive types
      */
     const numHeap = new MaxHeap([5, 24, 22, 111, 2, 6]);
-    expect(numHeap.contains(111)).toBe(true);
-    expect(numHeap.contains(1000)).toBe(false);
+    expect(numHeap.has(111)).toBe(true);
+    expect(numHeap.has(1000)).toBe(false);
   });
 
   test("insert method inserts adds an element to the heap", () => {
