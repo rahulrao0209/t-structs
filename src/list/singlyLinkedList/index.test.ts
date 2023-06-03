@@ -1,3 +1,4 @@
+import { EqualsFunc } from "../../utils";
 import SinglyLinkedList from "./index";
 import { describe, expect, test, beforeEach } from "vitest";
 
@@ -34,6 +35,13 @@ describe("Singly Linked List", () => {
     },
   ];
 
+  const equals: EqualsFunc<Country> = function (
+    a: Country,
+    b: Country
+  ): boolean {
+    return a.name === b.name && a.capitalCity === b.capitalCity;
+  };
+
   let list: SinglyLinkedList<Country> | undefined;
 
   beforeEach(() => {
@@ -43,6 +51,17 @@ describe("Singly Linked List", () => {
   test("List is initially empty", () => {
     if (!list) return;
     expect(list.isEmpty).toBe(true);
+  });
+
+  test("add list values during initialization", () => {
+    if (!list) return;
+    expect(list.isEmpty).toBe(true);
+
+    list = new SinglyLinkedList(values);
+
+    expect(list.isEmpty).toBe(false);
+    expect(list.length).toBe(values.length);
+    expect(list.get(0)?.value).toEqual(values[0]);
   });
 
   test("push method to add a node to the list", () => {
@@ -340,6 +359,17 @@ describe("Singly Linked List", () => {
      */
     expect(testNode?.value).not.toBe(undefined);
     expect(testNode?.value).toEqual(newValue);
+  });
+
+  test("has method checks whether an element/value exists in the list", () => {
+    if (!list) return;
+    /* Create a new list */
+    list = new SinglyLinkedList<Country>(values, equals);
+    expect(list.length).toBe(values.length);
+
+    /* Check whether a given value exists in the list */
+    expect(list.has({ name: "Italy", capitalCity: "Rome" })).toBe(false);
+    expect(list.has({ name: "India", capitalCity: "Delhi" })).toBe(true);
   });
 
   test("insert method inserts a node at the index passed in as the parameter", () => {

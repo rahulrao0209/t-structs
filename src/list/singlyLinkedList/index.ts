@@ -1,3 +1,5 @@
+import { EqualsFunc, defaultEquals } from "../../utils";
+
 class ListNode<T> {
   value: T;
   next: ListNode<T> | null;
@@ -12,11 +14,15 @@ class SinglyLinkedList<T> {
   #head: ListNode<T> | null;
   #tail: ListNode<T> | null;
   #length: number;
+  #equals: EqualsFunc<T>;
 
-  constructor() {
+  constructor(values: Iterable<T> = [], equals: EqualsFunc<T> = defaultEquals) {
     this.#head = null;
     this.#tail = null;
     this.#length = 0;
+    this.#equals = equals;
+    const initialValues = Array.from(values);
+    initialValues.length && this.pushAll(Array.from(values));
   }
 
   /**
@@ -157,6 +163,22 @@ class SinglyLinkedList<T> {
     if (!listNode) return false;
     listNode.value = value;
     return true;
+  }
+
+  /**
+   * Check whether an element/value exists in the heap.
+   * @param {T} element
+   * @returns {boolean}
+   */
+  has(element: T): boolean {
+    if (!this.#head) return false;
+    let current: ListNode<T> | null = this.#head;
+
+    while (current) {
+      if (this.#equals(element, current.value)) return true;
+      current = current.next;
+    }
+    return false;
   }
 
   /**
