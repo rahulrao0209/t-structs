@@ -1,6 +1,6 @@
-import { EqualsFunc } from "../../utils";
 import SinglyLinkedList from "./index";
 import { describe, expect, test, beforeEach } from "vitest";
+import { EqualsFunc } from "../../utils";
 
 /**
  * Test cases for Singly Linked List.
@@ -35,6 +35,12 @@ describe("Singly Linked List", () => {
     },
   ];
 
+  /**
+   * Equality logic for our custom Country type.
+   * @param {Country} a
+   * @param {Country} b
+   * @returns {boolean}
+   */
   const equals: EqualsFunc<Country> = function (
     a: Country,
     b: Country
@@ -370,6 +376,15 @@ describe("Singly Linked List", () => {
     /* Check whether a given value exists in the list */
     expect(list.has({ name: "Italy", capitalCity: "Rome" })).toBe(false);
     expect(list.has({ name: "India", capitalCity: "Delhi" })).toBe(true);
+
+    /* Validate the has method for primitive values */
+    const nums = [1, 4, 33, 22, 11, 54, 60, 12];
+    const numList = new SinglyLinkedList(nums);
+    expect(numList.isEmpty).toBe(false);
+    expect(numList.length).toBe(nums.length);
+    expect(numList.has(33)).toBe(true);
+    expect(numList.has(60)).toBe(true);
+    expect(numList.has(100)).toBe(false);
   });
 
   test("insert method inserts a node at the index passed in as the parameter", () => {

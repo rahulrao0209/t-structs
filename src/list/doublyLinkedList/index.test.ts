@@ -1,5 +1,6 @@
 import DoublyLinkedList from "./index";
 import { describe, expect, test, beforeEach, afterEach } from "vitest";
+import { EqualsFunc } from "../../utils";
 
 /**
  * Test cases for Doubly Linked List.
@@ -8,6 +9,42 @@ describe("Doubly Linked List", () => {
   type Country = {
     name: string;
     capital: string;
+  };
+
+  const values: Country[] = [
+    {
+      name: "India",
+      capital: "Delhi",
+    },
+    {
+      name: "U.S",
+      capital: "Washington",
+    },
+    {
+      name: "U.K",
+      capital: "London",
+    },
+    {
+      name: "France",
+      capital: "Paris",
+    },
+    {
+      name: "Canada",
+      capital: "Ottawa",
+    },
+  ];
+
+  /**
+   * Equality logic for our custom Country type.
+   * @param {Country} a
+   * @param {Country} b
+   * @returns {boolean}
+   */
+  const equals: EqualsFunc<Country> = function (
+    a: Country,
+    b: Country
+  ): boolean {
+    return a.name === b.name && a.capital === b.capital;
   };
 
   let list: DoublyLinkedList<Country> | undefined;
@@ -26,6 +63,17 @@ describe("Doubly Linked List", () => {
     expect(list.length).toBe(0);
     expect(list.head).toBe(null);
     expect(list.tail).toBe(null);
+  });
+
+  test("add list values during initialization", () => {
+    if (!list) return;
+    expect(list.isEmpty).toBe(true);
+
+    list = new DoublyLinkedList(values);
+
+    expect(list.isEmpty).toBe(false);
+    expect(list.length).toBe(values.length);
+    expect(list.get(0)?.value).toEqual(values[0]);
   });
 
   test("isEmpty is false when a node is pushed in", () => {
@@ -230,6 +278,26 @@ describe("Doubly Linked List", () => {
 
     expect(list.get(2)?.value).not.toEqual(initialValue);
     expect(list.get(2)?.value).toEqual(updatedValue);
+  });
+
+  test("has method checks whether an element/value exists in the list", () => {
+    if (!list) return;
+    /* Create a new list */
+    list = new DoublyLinkedList<Country>(values, equals);
+    expect(list.length).toBe(values.length);
+
+    /* Check whether a given value exists in the list */
+    expect(list.has({ name: "Italy", capital: "Rome" })).toBe(false);
+    expect(list.has({ name: "India", capital: "Delhi" })).toBe(true);
+
+    /* Validate the has method for primitive values */
+    const nums = [1, 4, 33, 22, 11, 54, 60, 12];
+    const numList = new DoublyLinkedList(nums);
+    expect(numList.isEmpty).toBe(false);
+    expect(numList.length).toBe(nums.length);
+    expect(numList.has(33)).toBe(true);
+    expect(numList.has(60)).toBe(true);
+    expect(numList.has(100)).toBe(false);
   });
 
   test("insert method inserts a node at a given index.", () => {
