@@ -109,6 +109,45 @@ describe("Doubly Linked List", () => {
     expect(list.tail?.value).toEqual(nodeVal);
   });
 
+  test("push method to add multiple nodes to the list", () => {
+    if (!list) return;
+
+    /* Initially the list is empty */
+    expect(list.isEmpty).toBe(true);
+    expect(list.length).toBe(0);
+
+    /* Add multiple nodes using push */
+    list.push(
+      {
+        name: "India",
+        capital: "Delhi",
+      },
+      {
+        name: "Italy",
+        capital: "Rome",
+      },
+      {
+        name: "France",
+        capital: "Paris",
+      }
+    );
+
+    expect(list.isEmpty).toBe(false);
+    expect(list.length).toBe(3);
+
+    /* Validate the multi-parameter push method for primitive values */
+    const nums = [1, 2, 3];
+    const numList = new DoublyLinkedList(nums);
+
+    expect(numList.isEmpty).toBe(false);
+    expect(numList.length).toBe(nums.length);
+
+    /* Push multiple nodes using push method */
+    numList.push(4, 5);
+    expect(numList.length).toBe(nums.length + 2);
+    expect(numList.get(3)?.value).toBe(4);
+  });
+
   test("pushAll method appends multiple nodes to the list", () => {
     if (!list) return;
     const initialLength = list.length;

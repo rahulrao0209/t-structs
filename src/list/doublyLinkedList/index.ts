@@ -42,7 +42,13 @@ class DoublyLinkedList<T> {
    * @param {T} value - the value of the node
    * @returns {DoublyLinkedList<T>} the updated list.
    */
-  push(value: T): DoublyLinkedList<T> {
+  push(value: T, ...rest: T[]): DoublyLinkedList<T> {
+    /* If multiple values are passed to push, use the pushAll method instead */
+    if (rest.length) {
+      this.pushAll([value, ...rest]);
+      return this;
+    }
+
     const listNode = new ListNode(value);
 
     if (!this.#head) {

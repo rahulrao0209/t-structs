@@ -41,7 +41,13 @@ class SinglyLinkedList<T> {
    * @param {T} value - The value of the ListNode.
    * @returns {SinglyLinkedList<T>} the updated list.
    */
-  push(value: T): SinglyLinkedList<T> {
+  push(value: T, ...rest: T[]): SinglyLinkedList<T> {
+    /* If multiple values are passed to push, use the pushAll method instead */
+    if (rest.length) {
+      this.pushAll([value, ...rest]);
+      return this;
+    }
+
     const listNode = new ListNode(value);
 
     if (!this.#head) {

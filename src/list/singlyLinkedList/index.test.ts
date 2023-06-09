@@ -91,6 +91,45 @@ describe("Singly Linked List", () => {
     expect(list.length).toBe(1);
   });
 
+  test("push method to add multiple nodes to the list", () => {
+    if (!list) return;
+
+    /* Initially the list is empty */
+    expect(list.isEmpty).toBe(true);
+    expect(list.length).toBe(0);
+
+    /* Add multiple nodes using push */
+    list.push(
+      {
+        name: "India",
+        capitalCity: "Delhi",
+      },
+      {
+        name: "Italy",
+        capitalCity: "Rome",
+      },
+      {
+        name: "France",
+        capitalCity: "Paris",
+      }
+    );
+
+    expect(list.isEmpty).toBe(false);
+    expect(list.length).toBe(3);
+
+    /* Validate the multi-parameter push method for primitive values */
+    const nums = [1, 2, 3];
+    const numList = new SinglyLinkedList(nums);
+
+    expect(numList.isEmpty).toBe(false);
+    expect(numList.length).toBe(nums.length);
+
+    /* Push multiple nodes using push method */
+    numList.push(4, 5);
+    expect(numList.length).toBe(nums.length + 2);
+    expect(numList.get(3)?.value).toBe(4);
+  });
+
   test("pushAll method to add multiple nodes to the list", () => {
     if (!list) return;
     /**
