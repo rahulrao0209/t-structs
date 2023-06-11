@@ -61,6 +61,25 @@ describe("Deque", () => {
     expect(deque.front).not.toEqual(deque.back);
   });
 
+  test("append method can append multiple elements to the deque", () => {
+    if (!deque) return;
+    expect(deque.size).toBe(0);
+    expect(deque.isEmpty).toBe(true);
+
+    /** Append multiple elements using append method */
+    expect(
+      deque.append(
+        { name: "Google", foundingYear: "1998" },
+        { name: "Microsoft", foundingYear: "1975" }
+      )
+    ).toBe(2);
+
+    expect(deque.isEmpty).toBe(false);
+    expect(deque.size).toBe(2);
+    expect(deque.front).toEqual({ name: "Google", foundingYear: "1998" });
+    expect(deque.back).toEqual({ name: "Microsoft", foundingYear: "1975" });
+  });
+
   test("appendAll method appends a list of elements/nodes", () => {
     if (!deque) return;
     const initialSize = deque.size;
@@ -115,6 +134,25 @@ describe("Deque", () => {
     expect(deque.size).toBe(initialSize + values.length);
     expect(deque.front).not.toEqual(values[0]);
     expect(deque.front).toEqual(values[values.length - 1]);
+  });
+
+  test("prepend method can prepend multiple elements to the deque", () => {
+    if (!deque) return;
+    expect(deque.isEmpty).toBe(true);
+    expect(deque.size).toBe(0);
+
+    /** Prepend multiple elements using prepend method */
+    expect(
+      deque.prepend(
+        { name: "Amazon", foundingYear: "1994" },
+        { name: "Apple", foundingYear: "1976" }
+      )
+    ).toBe(2);
+
+    expect(deque.isEmpty).toBe(false);
+    expect(deque.size).toBe(2);
+    expect(deque.front).toEqual({ name: "Apple", foundingYear: "1976" });
+    expect(deque.back).toEqual({ name: "Amazon", foundingYear: "1994" });
   });
 
   test("prependAll method prepends a list of elements/nodes to the deque", () => {

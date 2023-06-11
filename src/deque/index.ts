@@ -32,7 +32,7 @@ class Deque<T> {
   appendAll(values: T[]): number | undefined {
     if (!values.length) return;
     values.forEach((value: T) => this.append(value));
-    return this.#size;
+    return this.size;
   }
 
   /**
@@ -44,7 +44,7 @@ class Deque<T> {
   prependAll(values: T[]): number | undefined {
     if (!values.length) return;
     values.forEach((value: T) => this.prepend(value));
-    return this.#size;
+    return this.size;
   }
 
   /**
@@ -52,7 +52,13 @@ class Deque<T> {
    * @param {T} value of the node to be appended.
    * @returns {number} the size of the updated deque.
    */
-  append(value: T): number {
+  append(value: T, ...rest: T[]): number {
+    /** If multiple parameters are passed to append, use the appendAll method. */
+    if (rest.length) {
+      this.appendAll([value, ...rest]);
+      return this.size;
+    }
+
     if (this.#capacity && this.#size === this.#capacity)
       this.#throwCapacityError();
 
@@ -74,7 +80,7 @@ class Deque<T> {
     }
 
     this.#size += 1;
-    return this.#size;
+    return this.size;
   }
 
   /**
@@ -82,7 +88,13 @@ class Deque<T> {
    * @param {T} value of the node to be prepended.
    * @returns {number} the size of the updated deque.
    */
-  prepend(value: T): number {
+  prepend(value: T, ...rest: T[]): number {
+    /** If mulitple parameters are passed to prepend, use the prependAll method. */
+    if (rest.length) {
+      this.prependAll([value, ...rest]);
+      return this.size;
+    }
+
     if (this.#capacity && this.#size === this.#capacity)
       this.#throwCapacityError();
 
@@ -90,18 +102,18 @@ class Deque<T> {
 
     if (!this.#front) {
       this.append(value);
-      return this.#size;
+      return this.size;
     } else {
       const frontNode = this.#front;
       if (frontNode) {
         frontNode.prev = dequeNode;
         dequeNode.next = frontNode;
         this.#front = dequeNode;
-      } else return this.#size;
+      } else return this.size;
     }
 
     this.#size += 1;
-    return this.#size;
+    return this.size;
   }
 
   /**
