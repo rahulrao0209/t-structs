@@ -14,12 +14,14 @@ class Stack<T> {
   #size: number;
   #capacity?: number | undefined;
 
-  constructor(capacity?: number) {
+  constructor(values: Iterable<T> = [], capacity?: number) {
     this.#top = null;
     this.#bottom = null;
     this.#size = 0;
 
     if (capacity) this.#capacity = capacity;
+    const initialValues = Array.from(values);
+    initialValues.length && this.pushAll(initialValues);
   }
 
   /**
@@ -31,7 +33,7 @@ class Stack<T> {
   pushAll(values: T[]): number | undefined {
     if (!values.length) return;
     values.forEach((value: T) => this.push(value));
-    return this.#size;
+    return this.size;
   }
 
   /**
@@ -39,7 +41,13 @@ class Stack<T> {
    * @param {T} value - node/item to be added on top of the stack.
    * @returns {number} the current length of the stack.
    */
-  push(value: T): number {
+  push(value: T, ...rest: T[]): number {
+    /** If multiple values are passed to push, use the pushAll method instead. */
+    if (rest.length) {
+      this.pushAll([value, ...rest]);
+      return this.size;
+    }
+
     if (this.#capacity && this.#capacity === this.#size)
       this.#throwStackOverflowError();
 

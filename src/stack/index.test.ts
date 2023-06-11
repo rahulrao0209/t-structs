@@ -32,6 +32,23 @@ describe("Stack", () => {
     expect(stack.isFull).toBe(false);
   });
 
+  test("Stack initialization with initial values", () => {
+    stack = new Stack([
+      { name: "Google", foundingYear: "1998" },
+      { name: "Microsoft", foundingYear: "1975" },
+    ]);
+
+    expect(stack.isEmpty).toBe(false);
+    expect(stack.size).toBe(2);
+
+    /** Add two more items using pushAll */
+    stack.pushAll([
+      { name: "Amazon", foundingYear: "1994" },
+      { name: "Apple", foundingYear: "1976" },
+    ]);
+    expect(stack.size).toBe(4);
+  });
+
   test("push method adds a value to the stack", () => {
     if (!stack) return;
     const initialSize = stack.size;
@@ -42,6 +59,20 @@ describe("Stack", () => {
      */
     stack.push({ name: "Google", foundingYear: "1998" });
     expect(stack.size).toBe(initialSize + 1);
+  });
+
+  test("push method adds multiple values to the stack", () => {
+    if (!stack) return;
+    const initialSize = stack.size;
+    expect(initialSize).toBe(0);
+
+    /** Add multiple values to stack using push */
+    stack.push(
+      { name: "Google", foundingYear: "1998" },
+      { name: "Apple", foundingYear: "1976" }
+    );
+
+    expect(stack.size).toBe(initialSize + 2);
   });
 
   test("pushAll method adds list of values to the stack", () => {
@@ -158,7 +189,7 @@ describe("Stack", () => {
 
   test("initialize a stack with a capacity value", () => {
     const capacity = 2;
-    stack = new Stack<Company>(capacity);
+    stack = new Stack<Company>([], capacity);
 
     /**
      * Initially the stack is empty and has a capacity of two.
