@@ -32,7 +32,7 @@ describe("Stack", () => {
     expect(stack.isFull).toBe(false);
   });
 
-  test("Stack initialization with initial values", () => {
+  test("Stack can be populated during initialization", () => {
     stack = new Stack([
       { name: "Google", foundingYear: "1998" },
       { name: "Microsoft", foundingYear: "1975" },

@@ -18,8 +18,8 @@ class Stack<T> {
     this.#top = null;
     this.#bottom = null;
     this.#size = 0;
-
     if (capacity) this.#capacity = capacity;
+
     const initialValues = Array.from(values);
     initialValues.length && this.pushAll(initialValues);
   }
@@ -63,7 +63,7 @@ class Stack<T> {
     }
 
     this.#size += 1;
-    return this.#size;
+    return this.size;
   }
 
   /**

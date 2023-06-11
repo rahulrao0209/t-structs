@@ -30,6 +30,20 @@ describe("Queue", () => {
     expect(queue.isFull).toBe(false);
   });
 
+  test("Queue can be populated during initialization", () => {
+    queue = new Queue([
+      { name: "Google", foundingYear: "1998" },
+      { name: "Apple", foundingYear: "1976" },
+    ]);
+
+    expect(queue.isEmpty).toBe(false);
+    expect(queue.size).toBe(2);
+
+    /** Add an element to the queue using the enqueue method */
+    queue.enqueue({ name: "Microsoft", foundingYear: "1975" });
+    expect(queue.size).toBe(3);
+  });
+
   test("enqueue method adds a value to the queue", () => {
     if (!queue) return;
     const initialSize = queue.size;
@@ -41,6 +55,20 @@ describe("Queue", () => {
     queue.enqueue(values[0]);
     expect(queue.size).toBe(initialSize + 1);
     expect(queue.isEmpty).toBe(false);
+  });
+
+  test("enqueue method can add multiple values to the queue", () => {
+    /** Initialize a queue of numbers */
+    const numQueue = new Queue<number>();
+    const initialSize = numQueue.size;
+    expect(initialSize).toBe(0);
+
+    /** Add multiple values to the queue using the enqueue method */
+    numQueue.enqueue(1, 2, 3);
+    expect(numQueue.size).toBe(3);
+
+    /** Add two more values using enqueueAll */
+    expect(numQueue.enqueueAll([4, 5])).toBe(5);
   });
 
   test("enqueueAll method adds/enqueues a list of values to the queue", () => {
@@ -158,7 +186,7 @@ describe("Queue", () => {
 
   test("queue with a capacity provided, throws error if the size exceeds capacity", () => {
     const capacity = 2;
-    queue = new Queue<Company>(2);
+    queue = new Queue<Company>([], 2);
 
     /**
      * Initially the queue is empty and has a capacity of 2.

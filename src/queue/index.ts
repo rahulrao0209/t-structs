@@ -14,12 +14,14 @@ class Queue<T> {
   #size: number;
   #capacity?: number | undefined;
 
-  constructor(capacity?: number) {
+  constructor(values: Iterable<T> = [], capacity?: number) {
     this.#front = null;
     this.#back = null;
     this.#size = 0;
-
     if (capacity) this.#capacity = capacity;
+
+    const initialValues = Array.from(values);
+    initialValues.length && this.enqueueAll(initialValues);
   }
 
   /**
@@ -31,7 +33,7 @@ class Queue<T> {
   enqueueAll(values: T[]): number | undefined {
     if (!values.length) return;
     values.forEach((value: T) => this.enqueue(value));
-    return this.#size;
+    return this.size;
   }
 
   /**
@@ -39,7 +41,13 @@ class Queue<T> {
    * @param {T} value - value of the node to be appended.
    * @returns {number} size of the updated queue.
    */
-  enqueue(value: T): number {
+  enqueue(value: T, ...rest: T[]): number {
+    /** If multiple values are passed to enqueue, use the enqueueAll method instead */
+    if (rest.length) {
+      this.enqueueAll([value, ...rest]);
+      return this.size;
+    }
+
     if (this.#capacity && this.#size === this.#capacity)
       this.#throwCapacityError();
 
@@ -55,7 +63,7 @@ class Queue<T> {
     }
 
     this.#size += 1;
-    return this.#size;
+    return this.size;
   }
 
   /**
