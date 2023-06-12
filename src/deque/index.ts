@@ -16,11 +16,14 @@ class Deque<T> {
   #size: number;
   #capacity?: number | undefined;
 
-  constructor(capacity?: number) {
+  constructor(values: Iterable<T> = [], capacity?: number) {
     this.#front = null;
     this.#back = null;
     this.#size = 0;
     if (capacity) this.#capacity = capacity;
+
+    const initialValues = Array.from(values);
+    initialValues.length && this.appendAll(initialValues);
   }
 
   /**
@@ -76,7 +79,7 @@ class Deque<T> {
         backNode.next = dequeNode;
         dequeNode.prev = backNode;
         this.#back = dequeNode;
-      } else return this.#size;
+      }
     }
 
     this.#size += 1;
@@ -109,7 +112,7 @@ class Deque<T> {
         frontNode.prev = dequeNode;
         dequeNode.next = frontNode;
         this.#front = dequeNode;
-      } else return this.size;
+      }
     }
 
     this.#size += 1;

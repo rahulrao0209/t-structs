@@ -33,6 +33,20 @@ describe("Deque", () => {
     expect(deque.capacity).toBe(undefined);
   });
 
+  test("Deque can be populated during initialization", () => {
+    deque = new Deque([
+      { name: "Google", foundingYear: "1998" },
+      { name: "Apple", foundingYear: "1976" },
+    ]);
+
+    expect(deque.isEmpty).toBe(false);
+    expect(deque.size).toBe(2);
+
+    /** Append an element to the deque using the append method */
+    deque.append({ name: "Microsoft", foundingYear: "1975" });
+    expect(deque.size).toBe(3);
+  });
+
   test("append method appends an element to the deque", () => {
     if (!deque) return;
     const initialSize = deque.size;
@@ -318,7 +332,7 @@ describe("Deque", () => {
     /**
      * Initialize a deque with a capacity of 4.
      */
-    deque = new Deque<Company>(4);
+    deque = new Deque<Company>([], 4);
     const initialSize = deque.size;
     expect(deque.capacity).toBe(4);
     expect(initialSize).toBe(0);
