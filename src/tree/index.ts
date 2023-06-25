@@ -6,6 +6,7 @@ import {
 } from "../utils";
 
 import Queue from "../queue";
+import Stack from "../stack";
 
 type Traversal = "PRE_ORDER" | "IN_ORDER" | "POST_ORDER" | "LEVEL_ORDER";
 
@@ -23,8 +24,8 @@ export class TreeNode<T> {
 
 export abstract class Tree<T> {
   protected root: TreeNode<T> | null;
-  protected compare: CompareFunc<T>;
-  protected equals: EqualsFunc<T>;
+  protected readonly compare: CompareFunc<T>;
+  protected readonly equals: EqualsFunc<T>;
 
   constructor(
     values: Iterable<T> = [],
@@ -133,7 +134,7 @@ export abstract class Tree<T> {
     if (!node) return values;
 
     // Initialize the queue with the root node for level order traversal (breadth first search)
-    const queue = new Queue([node]);
+    const queue = new Queue<TreeNode<T>>([node]);
     let poppedNode: TreeNode<T> | undefined;
 
     while (!queue.isEmpty) {
@@ -172,6 +173,32 @@ export abstract class Tree<T> {
     const leftHeight = this.calculateHeight(node.left);
     const rightHeight = this.calculateHeight(node.right);
     return Math.max(leftHeight, rightHeight) + 1;
+  }
+
+  /**
+   * Checks whether a given value exists in the tree.
+   * @param {T} value
+   * @returns {boolean}
+   */
+  has(value: T): boolean {
+    if (!this.root) return false;
+
+    /** Initialize a stack for depth first search */
+    const stack = new Stack<TreeNode<T>>([this.root]);
+    let poppedNode: TreeNode<T> | undefined;
+
+    while (!stack.isEmpty) {
+      poppedNode = stack.pop();
+
+      if (poppedNode && this.equals(poppedNode.value, value)) {
+        return true;
+      }
+
+      /** Add the left and right child nodes to the stack. */
+      poppedNode && poppedNode.left && stack.push(poppedNode.left);
+      poppedNode && poppedNode.right && stack.push(poppedNode.right);
+    }
+    return false;
   }
 
   get height(): number {
