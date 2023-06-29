@@ -15,12 +15,20 @@ export default class BinaryTree<T> extends Tree<T> {
     super(values, compare, equals);
   }
 
+  /**
+   * Inserts multiple values into the tree.
+   * @param {T[]} values
+   */
   insertAll(values: T[]): BinaryTree<T> {
     if (!values.length) return this;
     values.forEach((value) => this.insert(value));
     return this;
   }
 
+  /**
+   * Inserts a value into the tree.
+   * @param {T} value
+   */
   insert(value: T): BinaryTree<T> {
     const newNode = new TreeNode(value);
     let root = this.root;
@@ -31,6 +39,18 @@ export default class BinaryTree<T> extends Tree<T> {
     }
     this.insertNode(root, newNode);
     return this;
+  }
+
+  /**
+   * Removes a value from the binary tree.
+   * @param {T} value
+   */
+  remove(value: T): TreeNode<T> | undefined {
+    if (!this.root) return;
+    if (!this.has(value)) return;
+
+    // TODO
+    return;
   }
 
   private insertNode(node: TreeNode<T>, newNode: TreeNode<T>): void {

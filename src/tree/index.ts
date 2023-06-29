@@ -52,28 +52,31 @@ export abstract class Tree<T> {
   abstract insert(value: T): Tree<T>;
 
   /**
+   * Removes a value from the tree.
+   * @param {T} value
+   */
+  abstract remove(value: T): TreeNode<T> | undefined;
+
+  /**
+   * Deletes the tree.
+   */
+  delete(): void {
+    if (this.root) this.root = null;
+  }
+
+  /**
    * Preorder traversal involves, visting the root node first,
    * followed by the left subtree and the right subtree at the end.
    * (root, left, right) order.
    * @param {TreeNode<T> | null} node
-   * @returns {T[]}
+   * @returns {IterableIterator<T>}
    */
-  protected preOrderTraversal(node: TreeNode<T> | null): T[] {
-    const values: T[] = [];
+  protected *preOrderTraversal(node: TreeNode<T> | null): IterableIterator<T> {
+    if (!node) return [];
 
-    const preOrderHelper = function (
-      node: TreeNode<T> | null,
-      values: T[]
-    ): T[] {
-      if (!node) return values;
-      values.push(node.value);
-      preOrderHelper(node.left, values);
-      preOrderHelper(node.right, values);
-
-      return values;
-    };
-
-    return preOrderHelper(node, values);
+    yield node.value;
+    yield* this.preOrderTraversal(node.left);
+    yield* this.preOrderTraversal(node.right);
   }
 
   /**
@@ -81,23 +84,14 @@ export abstract class Tree<T> {
    * followed by the root and then the right subtree at the end.
    * (left, root, right) order.
    * @param {TreeNode<T> | null} node
-   * @returns {T[]}
+   * @returns {IterableIterator<T>}
    */
-  protected inOrderTraversal(node: TreeNode<T> | null): T[] {
-    const values: T[] = [];
-    const inOrderHelper = function (
-      node: TreeNode<T> | null,
-      values: T[]
-    ): T[] {
-      if (!node) return values;
-      inOrderHelper(node.left, values);
-      values.push(node.value);
-      inOrderHelper(node.right, values);
+  protected *inOrderTraversal(node: TreeNode<T> | null): IterableIterator<T> {
+    if (!node) return [];
 
-      return values;
-    };
-
-    return inOrderHelper(node, values);
+    yield* this.inOrderTraversal(node.left);
+    yield node.value;
+    yield* this.inOrderTraversal(node.right);
   }
 
   /**
@@ -105,20 +99,14 @@ export abstract class Tree<T> {
    * followed by the right subtree, visiting the root node at the end.
    * (left, right, root) order.
    * @param {TreeNode<T> | null} node
-   * @returns {T[]}
+   * @returns {IterableIterator<T>}
    */
-  protected postOrderTraversal(node: TreeNode<T> | null): T[] {
-    const values: T[] = [];
-    const postOrderHelper = function (node: TreeNode<T> | null, values: T[]) {
-      if (!node) return values;
-      postOrderHelper(node.left, values);
-      postOrderHelper(node.right, values);
-      values.push(node.value);
+  protected *postOrderTraversal(node: TreeNode<T> | null): IterableIterator<T> {
+    if (!node) return [];
 
-      return values;
-    };
-
-    return postOrderHelper(node, values);
+    yield* this.postOrderTraversal(node.left);
+    yield* this.postOrderTraversal(node.right);
+    yield node.value;
   }
 
   /**
@@ -154,12 +142,13 @@ export abstract class Tree<T> {
    * @returns {T[]}
    */
   traverse(traversal?: Traversal): T[] {
-    if (traversal === "PRE_ORDER") return this.preOrderTraversal(this.root);
+    if (traversal === "PRE_ORDER")
+      return [...this.preOrderTraversal(this.root)];
     else if (traversal === "POST_ORDER")
-      return this.postOrderTraversal(this.root);
+      return [...this.postOrderTraversal(this.root)];
     else if (traversal === "LEVEL_ORDER")
       return this.levelOrderTraversal(this.root);
-    return this.inOrderTraversal(this.root);
+    return [...this.inOrderTraversal(this.root)];
   }
 
   /**
