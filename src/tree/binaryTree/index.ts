@@ -37,7 +37,8 @@ export default class BinaryTree<T> extends Tree<T> {
       this.root = newNode;
       return this;
     }
-    this.insertNode(root, newNode);
+
+    [...this.insertNode(root, newNode)];
     return this;
   }
 
@@ -46,6 +47,7 @@ export default class BinaryTree<T> extends Tree<T> {
    * @param {T} value
    */
   remove(value: T): TreeNode<T> | undefined {
+    /** If there is no root node or if the tree does not have the given value, return. */
     if (!this.root) return;
     if (!this.has(value)) return;
 
@@ -53,21 +55,15 @@ export default class BinaryTree<T> extends Tree<T> {
     return;
   }
 
-  private insertNode(node: TreeNode<T>, newNode: TreeNode<T>): void {
-    if (!node.left) {
-      node.left = newNode;
-    } else if (!node.right) {
-      node.right = newNode;
-    } else {
-      /**
-       * If both left and right child nodes exist, then recursively traverse down the tree
-       * and insert the new node into the first available spot in the left or right subtree.
-       */
-      if (Math.random() < 0.5) {
-        this.insertNode(node.left, newNode);
-      } else {
-        this.insertNode(node.right, newNode);
-      }
+  private *insertNode(
+    node: TreeNode<T>,
+    newNode: TreeNode<T>
+  ): IterableIterator<TreeNode<T>> {
+    if (!node.left) yield (node.left = newNode);
+    else if (!node.right) yield (node.right = newNode);
+    else {
+      if (Math.random() < 0.5) yield* this.insertNode(node.left, newNode);
+      else yield* this.insertNode(node.right, newNode);
     }
   }
 }
