@@ -10,6 +10,11 @@ import Stack from "../stack";
 
 type Traversal = "PRE_ORDER" | "IN_ORDER" | "POST_ORDER" | "LEVEL_ORDER";
 
+export type NodeWithParent<T> = {
+  node: TreeNode<T>;
+  parent: TreeNode<T> | undefined;
+};
+
 export class TreeNode<T> {
   value: T;
   left: TreeNode<T> | null;
@@ -56,6 +61,50 @@ export abstract class Tree<T> {
    * @param {T} value
    */
   abstract remove(value: T): TreeNode<T> | undefined;
+
+  /**
+   * Returns an object containing the node to be removed and its parent.
+   * @param {T} value of the node to be removed.
+   * @returns {NodeWithParent<T> | undefined}
+   */
+  protected getNodeToBeRemoved(value: T): NodeWithParent<T> | undefined {
+    if (!this.root) return;
+
+    let current: TreeNode<T> | undefined = this.root;
+    let parent: TreeNode<T> | undefined;
+    let poppedNode: NodeWithParent<T> | undefined;
+
+    const stack = new Stack<NodeWithParent<T>>([
+      {
+        node: current,
+        parent: parent,
+      },
+    ]);
+
+    while (!stack.isEmpty) {
+      poppedNode = stack.pop();
+      if (!poppedNode) return;
+
+      const { node } = poppedNode;
+
+      /** If the node value matches our target value return the data. */
+      if (node.value === value) return poppedNode;
+
+      /** Add the left node with current node as its parent to the stack. */
+      node.left &&
+        stack.push({
+          node: node.left,
+          parent: node,
+        });
+
+      /** Add the right node with current node as its parent to the stack. */
+      node.right &&
+        stack.push({
+          node: node.right,
+          parent: node,
+        });
+    }
+  }
 
   /**
    * Deletes the tree.
