@@ -35,7 +35,7 @@ export default class BinaryTree<T> extends Tree<T> {
     let root = this.root;
 
     if (!root) {
-      this.root = newNode;
+      this._root = newNode;
       return this;
     }
 
@@ -88,17 +88,17 @@ export default class BinaryTree<T> extends Tree<T> {
       this.removeNode(replacementNode.value);
       node.value = replacementNode.value;
     } else if (node.left) {
-      if (!parent) this.root = node.left;
+      if (!parent) this._root = node.left;
       if (parent && parent.left?.value === node.value) parent.left = node.left;
       if (parent && parent.right?.value === node.value)
         parent.right = node.left;
     } else if (node.right) {
-      if (!parent) this.root = node.right;
+      if (!parent) this._root = node.right;
       if (parent && parent.left?.value === node.value) parent.left = node.right;
       if (parent && parent.right?.value === node.value)
         parent.right = node.right;
     } else {
-      if (!parent) this.root = null;
+      if (!parent) this._root = null;
       if (parent && parent.left?.value === node.value) parent.left = null;
       if (parent && parent.right?.value === node.value) parent.right = null;
     }

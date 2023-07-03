@@ -28,7 +28,7 @@ export class TreeNode<T> {
 }
 
 export abstract class Tree<T> {
-  protected root: TreeNode<T> | null;
+  protected _root: TreeNode<T> | null;
   protected readonly compare: CompareFunc<T>;
   protected readonly equals: EqualsFunc<T>;
 
@@ -37,7 +37,7 @@ export abstract class Tree<T> {
     compare: CompareFunc<T> = defaultCompare,
     equals: EqualsFunc<T> = defaultEquals
   ) {
-    this.root = null;
+    this._root = null;
     this.compare = compare;
     this.equals = equals;
     const initialValues = Array.from(values);
@@ -110,7 +110,7 @@ export abstract class Tree<T> {
    * Deletes the tree.
    */
   delete(): void {
-    if (this.root) this.root = null;
+    if (this.root) this._root = null;
   }
 
   /**
@@ -239,10 +239,23 @@ export abstract class Tree<T> {
     return false;
   }
 
+  /**
+   * Exposes the root of the tree as a read-only property.
+   */
+  get root(): TreeNode<T> | null {
+    return this._root;
+  }
+
+  /**
+   * Returns the height of the tree.
+   */
   get height(): number {
     return this.calculateHeight(this.root);
   }
 
+  /**
+   * Checks whether the tree is empty.
+   */
   get isEmpty(): boolean {
     if (!this.root) return true;
     return false;
