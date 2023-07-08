@@ -25,9 +25,9 @@ describe("MinHeap", () => {
    * Comparison logic for our custom company type.
    * @param {Company} a
    * @param {Company} b
-   * @returns {number}
+   * @returns {1 | -1 | 0}
    */
-  const compare = function (a: Company, b: Company): number {
+  const compare = function (a: Company, b: Company): 1 | -1 | 0 {
     if (+a.foundingYear > +b.foundingYear) return 1;
     else if (+a.foundingYear < +b.foundingYear) return -1;
     else return 0;

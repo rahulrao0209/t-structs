@@ -1,4 +1,4 @@
-export type CompareFunc<T> = (a: T, b: T) => number;
+export type CompareFunc<T> = (a: T, b: T) => 1 | -1 | 0;
 export type EqualsFunc<T> = (a: T, b: T) => boolean;
 
 export const defaultCompare = function <T>(a: T, b: T) {
