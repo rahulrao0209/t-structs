@@ -31,6 +31,7 @@ export abstract class Tree<T> {
   protected _root: TreeNode<T> | null;
   protected readonly compare: CompareFunc<T>;
   protected readonly equals: EqualsFunc<T>;
+  protected readonly values: Iterable<T>;
 
   constructor(
     values: Iterable<T> = [],
@@ -40,7 +41,8 @@ export abstract class Tree<T> {
     this._root = null;
     this.compare = compare;
     this.equals = equals;
-    const initialValues = Array.from(values);
+    this.values = values;
+    const initialValues = Array.from(this.values);
     initialValues.length && this.insertAll(initialValues);
   }
 
