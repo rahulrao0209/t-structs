@@ -65,48 +65,11 @@ export abstract class Tree<T> {
   abstract remove(value: T): TreeNode<T> | undefined;
 
   /**
-   * Returns an object containing the node to be removed and its parent.
-   * @param {T} value of the node to be removed.
-   * @returns {NodeWithParent<T> | undefined}
+   * Checks whether a given value exists in the tree.
+   * @param {T} value
+   * @returns {boolean}
    */
-  protected getNodeToBeRemoved(value: T): NodeWithParent<T> | undefined {
-    if (!this.root) return;
-
-    let current: TreeNode<T> | undefined = this.root;
-    let parent: TreeNode<T> | undefined;
-    let poppedNode: NodeWithParent<T> | undefined;
-
-    const stack = new Stack<NodeWithParent<T>>([
-      {
-        node: current,
-        parent: parent,
-      },
-    ]);
-
-    while (!stack.isEmpty) {
-      poppedNode = stack.pop();
-      if (!poppedNode) return;
-
-      const { node } = poppedNode;
-
-      /** If the node value matches our target value return the data. */
-      if (node.value === value) return poppedNode;
-
-      /** Add the left node with current node as its parent to the stack. */
-      node.left &&
-        stack.push({
-          node: node.left,
-          parent: node,
-        });
-
-      /** Add the right node with current node as its parent to the stack. */
-      node.right &&
-        stack.push({
-          node: node.right,
-          parent: node,
-        });
-    }
-  }
+  abstract has(value: T): boolean;
 
   /**
    * Deletes the tree.
@@ -213,32 +176,6 @@ export abstract class Tree<T> {
     const leftHeight = this.calculateHeight(node.left);
     const rightHeight = this.calculateHeight(node.right);
     return Math.max(leftHeight, rightHeight) + 1;
-  }
-
-  /**
-   * Checks whether a given value exists in the tree.
-   * @param {T} value
-   * @returns {boolean}
-   */
-  has(value: T): boolean {
-    if (!this.root) return false;
-
-    /** Initialize a stack for depth first search */
-    const stack = new Stack<TreeNode<T>>([this.root]);
-    let poppedNode: TreeNode<T> | undefined;
-
-    while (!stack.isEmpty) {
-      poppedNode = stack.pop();
-
-      if (poppedNode && this.equals(poppedNode.value, value)) {
-        return true;
-      }
-
-      /** Add the left and right child nodes to the stack. */
-      poppedNode && poppedNode.left && stack.push(poppedNode.left);
-      poppedNode && poppedNode.right && stack.push(poppedNode.right);
-    }
-    return false;
   }
 
   /**

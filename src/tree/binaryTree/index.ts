@@ -6,6 +6,7 @@ import {
   defaultEquals,
 } from "../../utils";
 import type { NodeWithParent } from "../index";
+import Stack from "../../stack";
 
 export default class BinaryTree<T> extends Tree<T> {
   constructor(
@@ -56,6 +57,50 @@ export default class BinaryTree<T> extends Tree<T> {
   }
 
   /**
+   * Returns an object containing the node and its parent.
+   * @param {T} value of the node to be removed.
+   * @returns {NodeWithParent<T> | undefined}
+   */
+  private getNodeWithParent(value: T): NodeWithParent<T> | undefined {
+    if (!this.root) return;
+
+    let current: TreeNode<T> | undefined = this.root;
+    let parent: TreeNode<T> | undefined;
+    let poppedNode: NodeWithParent<T> | undefined;
+
+    const stack = new Stack<NodeWithParent<T>>([
+      {
+        node: current,
+        parent: parent,
+      },
+    ]);
+
+    while (!stack.isEmpty) {
+      poppedNode = stack.pop();
+      if (!poppedNode) return;
+
+      const { node } = poppedNode;
+
+      /** If the node value matches our target value return the data. */
+      if (this.equals(node.value, value)) return poppedNode;
+
+      /** Add the left node with current node as its parent to the stack. */
+      node.left &&
+        stack.push({
+          node: node.left,
+          parent: node,
+        });
+
+      /** Add the right node with current node as its parent to the stack. */
+      node.right &&
+        stack.push({
+          node: node.right,
+          parent: node,
+        });
+    }
+  }
+
+  /**
    * Since a general binary trees nodes are arranged in a random order, here are the steps
    * we'll follow to remove a node from the tree while still maintaining the binary tree property.
    * -------------------------------------------------------------------------------
@@ -77,14 +122,14 @@ export default class BinaryTree<T> extends Tree<T> {
    *         deleting the node.
    */
   private removeNode(value: T): TreeNode<T> | undefined {
-    const data: NodeWithParent<T> | undefined = this.getNodeToBeRemoved(value);
+    const data: NodeWithParent<T> | undefined = this.getNodeWithParent(value);
     if (!data) return;
 
     const { node, parent } = data;
     const removedNode = { ...node };
 
     if (node.left && node.right) {
-      const replacementNode = this.getReplacementForNode(node);
+      const replacementNode = this.getReplacementForNode(node.right);
       this.removeNode(replacementNode.value);
       node.value = replacementNode.value;
     } else if (node.left) {
@@ -146,5 +191,31 @@ export default class BinaryTree<T> extends Tree<T> {
       if (Math.random() < 0.5) yield* this.insertNode(node.left, newNode);
       else yield* this.insertNode(node.right, newNode);
     }
+  }
+
+  /**
+   * Checks whether a given value exists in the tree.
+   * @param {T} value
+   * @returns {boolean}
+   */
+  has(value: T): boolean {
+    if (!this.root) return false;
+
+    /** Initialize a stack for depth first search */
+    const stack = new Stack<TreeNode<T>>([this.root]);
+    let poppedNode: TreeNode<T> | undefined;
+
+    while (!stack.isEmpty) {
+      poppedNode = stack.pop();
+
+      if (poppedNode && this.equals(poppedNode.value, value)) {
+        return true;
+      }
+
+      /** Add the left and right child nodes to the stack. */
+      poppedNode && poppedNode.left && stack.push(poppedNode.left);
+      poppedNode && poppedNode.right && stack.push(poppedNode.right);
+    }
+    return false;
   }
 }
