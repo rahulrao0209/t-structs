@@ -6,7 +6,9 @@ import {
   defaultEquals,
 } from "../../utils";
 import type { NodeWithParent } from "../index";
+import { IN_ORDER_PREDECESSOR, IN_ORDER_SUCCESSOR } from "../constants";
 
+type ReplacementNode = "IN_ORDER_SUCCESSOR" | "IN_ORDER_PREDECESSOR";
 export default class BinarySearchTree<T> extends Tree<T> {
   constructor(
     values: Iterable<T> = [],
@@ -82,23 +84,44 @@ export default class BinarySearchTree<T> extends Tree<T> {
     const removedNode = { ...node };
 
     if (node.left && node.right) {
-      const replacementNode = this.getReplacementForNode(node.right);
+      let replacementNode = this.getReplacementForNode(node.right);
+
+      /**
+       * Special Case: If the replacement node is a duplicate node (i.e has the same value as the node to be removed)
+       *  then use the in-order predecessor as the replacement node.
+       */
+      if (this.equals(replacementNode.value, node.value)) {
+        replacementNode = this.getReplacementForNode(
+          node.left,
+          IN_ORDER_PREDECESSOR
+        );
+      }
       this.removeNode(replacementNode.value);
       node.value = replacementNode.value;
     } else if (node.left) {
       if (!parent) this._root = node.left;
-      if (parent && parent.left?.value === node.value) parent.left = node.left;
-      if (parent && parent.right?.value === node.value)
+
+      if (parent && parent.left && this.equals(parent.left.value, node.value))
+        parent.left = node.left;
+
+      if (parent && parent.right && this.equals(parent.right.value, node.value))
         parent.right = node.left;
     } else if (node.right) {
       if (!parent) this._root = node.right;
-      if (parent && parent.left?.value === node.value) parent.left = node.right;
-      if (parent && parent.right?.value === node.value)
+
+      if (parent && parent.left && this.equals(parent.left.value, node.value))
+        parent.left = node.right;
+
+      if (parent && parent.right && this.equals(parent.right.value, node.value))
         parent.right = node.right;
     } else {
       if (!parent) this._root = null;
-      if (parent && parent.left?.value === node.value) parent.left = null;
-      if (parent && parent.right?.value === node.value) parent.right = null;
+
+      if (parent && parent.left && this.equals(parent.left.value, node.value))
+        parent.left = null;
+
+      if (parent && parent.right && this.equals(parent.right.value, node.value))
+        parent.right = null;
     }
 
     /** Remove the left and right child references if any of the removed node. */
@@ -110,7 +133,8 @@ export default class BinarySearchTree<T> extends Tree<T> {
   /**
    * In case of a binary search tree,
    * the replacement node would be the inorder successor
-   * which is the smallest node in the right subtree
+   * which is the smallest node in the right subtree except for
+   * a special case wherein the in-order successor is a duplicate node.
    */
 
   /**
@@ -118,11 +142,46 @@ export default class BinarySearchTree<T> extends Tree<T> {
    * @param {TreeNode<T>} node
    * @returns
    */
-  private getReplacementForNode(node: TreeNode<T>): TreeNode<T> {
+  private getReplacementForNode(
+    node: TreeNode<T>,
+    nodeType: ReplacementNode = IN_ORDER_SUCCESSOR
+  ): TreeNode<T> {
+    if (nodeType === IN_ORDER_SUCCESSOR) return this.getInOrderSuccesor(node);
+    return this.getInOrderPredecessor(node);
+  }
+
+  /**
+   * In-order successor for a binary search tree is the
+   * node with the smallest value in the right sub-tree.
+   */
+  /**
+   * Returns the in-order successor of a given node.
+   * @param {TreeNode<T>} node
+   * @returns {TreeNode<T>} the in-order successor node.
+   */
+  private getInOrderSuccesor(node: TreeNode<T>): TreeNode<T> {
     let current: TreeNode<T> = node;
 
     while (current && current.left) {
       current = current.left;
+    }
+    return current;
+  }
+
+  /**
+   * In-order predecessor for a binary search tree is the node
+   * with the largest value in the left sub-tree.
+   */
+  /**
+   * Returns the in-order predecessor of a given node.
+   * @param {TreeNode<T>} node
+   * @returns {TreeNode<T>} the in-order predecessor node.
+   */
+  private getInOrderPredecessor(node: TreeNode<T>): TreeNode<T> {
+    let current: TreeNode<T> = node;
+
+    while (current && current.right) {
+      current = current.right;
     }
     return current;
   }

@@ -6,7 +6,7 @@ import {
 } from "../utils";
 
 import Queue from "../queue";
-import Stack from "../stack";
+import { PRE_ORDER, POST_ORDER, LEVEL_ORDER } from "./constants";
 
 type Traversal = "PRE_ORDER" | "IN_ORDER" | "POST_ORDER" | "LEVEL_ORDER";
 
@@ -156,11 +156,10 @@ export abstract class Tree<T> {
    * @returns {T[]}
    */
   traverse(traversal?: Traversal): T[] {
-    if (traversal === "PRE_ORDER")
-      return [...this.preOrderTraversal(this.root)];
-    else if (traversal === "POST_ORDER")
+    if (traversal === PRE_ORDER) return [...this.preOrderTraversal(this.root)];
+    else if (traversal === POST_ORDER)
       return [...this.postOrderTraversal(this.root)];
-    else if (traversal === "LEVEL_ORDER")
+    else if (traversal === LEVEL_ORDER)
       return this.levelOrderTraversal(this.root);
     return [...this.inOrderTraversal(this.root)];
   }
