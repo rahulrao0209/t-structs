@@ -7,6 +7,7 @@ import {
 } from "../../utils";
 import type { NodeWithParent } from "../index";
 import Stack from "../../stack";
+import Queue from "../../queue";
 
 export default class BinaryTree<T> extends Tree<T> {
   constructor(
@@ -40,7 +41,7 @@ export default class BinaryTree<T> extends Tree<T> {
       return this;
     }
 
-    [...this.insertNode(root, newNode)];
+    this.insertNode(newNode);
     return this;
   }
 
@@ -121,17 +122,39 @@ export default class BinaryTree<T> extends Tree<T> {
    *         In this case we can make the parent's reference simply point to null effectively
    *         deleting the node.
    */
-  private removeNode(value: T): TreeNode<T> | undefined {
-    const data: NodeWithParent<T> | undefined = this.getNodeWithParent(value);
+  private removeNode(
+    value: T,
+    isDuplicate: boolean = false
+  ): TreeNode<T> | undefined {
+    if (!isDuplicate) {
+    }
+    const data: NodeWithParent<T> | undefined = !isDuplicate
+      ? this.getNodeWithParent(value)
+      : this.getFarthestLeaf(value);
     if (!data) return;
 
     const { node, parent } = data;
     const removedNode = { ...node };
 
     if (node.left && node.right) {
-      const replacementNode = this.getReplacementForNode(node.right);
-      this.removeNode(replacementNode.value);
-      node.value = replacementNode.value;
+      let replacementNode = this.getReplacementForNode(node.left);
+
+      if (this.equals(replacementNode.value, node.value)) {
+        /**
+         * At this point, we can conclude that the tree consists
+         * of only duplicate values because all duplicates are inserted
+         * to the right. So now we need to replace the node which we
+         * need to remove, with its duplicate located to the far right.
+         * To achieve this, we can use a level order traversal and find
+         * the duplicate from the end of the traversed array and
+         * that would be the leaf node which should be removed from the tree.
+         */
+        this.removeNode(value, true);
+        node.value = replacementNode.value;
+      } else {
+        this.removeNode(replacementNode.value);
+        node.value = replacementNode.value;
+      }
     } else if (node.left) {
       if (!parent) this._root = node.left;
 
@@ -164,6 +187,44 @@ export default class BinaryTree<T> extends Tree<T> {
     return removedNode;
   }
 
+  private getFarthestLeaf(val: T) {
+    if (!this.root) return;
+    const values: NodeWithParent<T>[] = [];
+    const queue = new Queue<NodeWithParent<T>>([
+      {
+        parent: undefined,
+        node: this.root,
+      },
+    ]);
+
+    let poppedNode: NodeWithParent<T> | undefined;
+
+    while (!queue.isEmpty) {
+      poppedNode = queue.dequeue();
+      poppedNode && values.push(poppedNode);
+
+      // Add the left and right nodes to the queue.
+      poppedNode &&
+        poppedNode.node.left &&
+        queue.enqueue({
+          parent: poppedNode.node,
+          node: poppedNode.node.left,
+        });
+      poppedNode &&
+        poppedNode.node.right &&
+        queue.enqueue({
+          parent: poppedNode.node,
+          node: poppedNode.node.right,
+        });
+    }
+
+    const node = values
+      .reverse()
+      .find((value: NodeWithParent<T>) => this.equals(value.node.value, val));
+
+    return node;
+  }
+
   /**
    * The getReplacementForNode function will give us a leaf node which would be a succesor of the node to be deleted/removed.
    * We can use any leaf node, but for the purpose of this implementation, our method will use a node in the right
@@ -189,17 +250,33 @@ export default class BinaryTree<T> extends Tree<T> {
   /**
    * Insert a given node in the binary tree.
    * @param {TreeNode<T>} node
-   * @param {TreeNode<T>} newNode
    */
-  private *insertNode(
-    node: TreeNode<T>,
-    newNode: TreeNode<T>
-  ): IterableIterator<TreeNode<T>> {
-    if (!node.left) yield (node.left = newNode);
-    else if (!node.right) yield (node.right = newNode);
-    else {
-      if (Math.random() < 0.5) yield* this.insertNode(node.left, newNode);
-      else yield* this.insertNode(node.right, newNode);
+  private insertNode(node: TreeNode<T>) {
+    if (!this.root) return;
+    let current: TreeNode<T> | null = this.root;
+    const isDuplicate = this.has(node.value);
+
+    /** If its a duplicate node, always insert at far right. */
+    if (isDuplicate) {
+      while (current && current.right) {
+        current = current.right;
+      }
+
+      current.right = node;
+      return;
+    }
+
+    while (current) {
+      if (!current.left) {
+        current.left = node;
+        return;
+      } else if (!current.right) {
+        current.right = node;
+        return;
+      } else {
+        if (Math.random() < 0.5) current = current.left;
+        else current = current.right;
+      }
     }
   }
 
