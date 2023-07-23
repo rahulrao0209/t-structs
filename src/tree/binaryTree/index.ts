@@ -126,8 +126,7 @@ export default class BinaryTree<T> extends Tree<T> {
     value: T,
     isDuplicate: boolean = false
   ): TreeNode<T> | undefined {
-    if (!isDuplicate) {
-    }
+    /** If the node's a duplicate, then get the farthest leaf node with the given value */
     const data: NodeWithParent<T> | undefined = !isDuplicate
       ? this.getNodeWithParent(value)
       : this.getFarthestLeaf(value);
@@ -139,22 +138,22 @@ export default class BinaryTree<T> extends Tree<T> {
     if (node.left && node.right) {
       let replacementNode = this.getReplacementForNode(node.left);
 
+      /**
+       * Special Case: When the replacment node is a duplicate.
+       * ----------------------------------------------------------
+       * In this case, we need replace the node to be removed,
+       * with its duplicate located to the far right which would be a leaf node.
+       * To achieve this, we can use a level order traversal and find
+       * the duplicate from the end of the traversed array. Its necessary to handle
+       * this case in a special way to avoid infinite recursion that we would run into
+       * in case of removing duplicate nodes.
+       */
       if (this.equals(replacementNode.value, node.value)) {
-        /**
-         * At this point, we can conclude that the tree consists
-         * of only duplicate values because all duplicates are inserted
-         * to the right. So now we need to replace the node which we
-         * need to remove, with its duplicate located to the far right.
-         * To achieve this, we can use a level order traversal and find
-         * the duplicate from the end of the traversed array and
-         * that would be the leaf node which should be removed from the tree.
-         */
-        this.removeNode(value, true);
-        node.value = replacementNode.value;
+        this.removeNode(replacementNode.value, true);
       } else {
         this.removeNode(replacementNode.value);
-        node.value = replacementNode.value;
       }
+      node.value = replacementNode.value;
     } else if (node.left) {
       if (!parent) this._root = node.left;
 
@@ -187,7 +186,7 @@ export default class BinaryTree<T> extends Tree<T> {
     return removedNode;
   }
 
-  private getFarthestLeaf(val: T) {
+  private getFarthestLeaf(value: T) {
     if (!this.root) return;
     const values: NodeWithParent<T>[] = [];
     const queue = new Queue<NodeWithParent<T>>([
@@ -203,7 +202,7 @@ export default class BinaryTree<T> extends Tree<T> {
       poppedNode = queue.dequeue();
       poppedNode && values.push(poppedNode);
 
-      // Add the left and right nodes to the queue.
+      /** Add the left and right nodes to the queue. */
       poppedNode &&
         poppedNode.node.left &&
         queue.enqueue({
@@ -220,7 +219,7 @@ export default class BinaryTree<T> extends Tree<T> {
 
     const node = values
       .reverse()
-      .find((value: NodeWithParent<T>) => this.equals(value.node.value, val));
+      .find((v: NodeWithParent<T>) => this.equals(v.node.value, value));
 
     return node;
   }
