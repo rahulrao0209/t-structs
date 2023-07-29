@@ -1,5 +1,5 @@
 import MinHeap from "./index";
-import { EqualsFunc } from "../../../utils";
+import type { EqualsFunc, CompareFunc } from "../../../utils";
 import { describe, expect, test, beforeEach } from "vitest";
 
 /**
@@ -27,7 +27,10 @@ describe("MinHeap", () => {
    * @param {Company} b
    * @returns {1 | -1 | 0}
    */
-  const compare = function (a: Company, b: Company): 1 | -1 | 0 {
+  const compare: CompareFunc<Company> = function (
+    a: Company,
+    b: Company
+  ): 1 | -1 | 0 {
     if (+a.foundingYear > +b.foundingYear) return 1;
     else if (+a.foundingYear < +b.foundingYear) return -1;
     else return 0;
