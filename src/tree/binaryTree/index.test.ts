@@ -28,6 +28,14 @@ describe("Binary Tree", () => {
       brand: "BMW",
       cost: 620,
     },
+    {
+      brand: "Jeep",
+      cost: 600,
+    },
+    {
+      brand: "Toyota",
+      cost: 400,
+    },
   ];
 
   let binaryTree: BinaryTree<Vehicle> | undefined;
@@ -207,6 +215,36 @@ describe("Binary Tree", () => {
     });
 
     /** Verify that the binary tree is empty after removal of all nodes in the previous operation */
+    expect(binaryTree.isEmpty).toBe(true);
+    expect(binaryTree.height).toBe(0);
+  });
+
+  test("Test removing nodes from a binary tree with duplicates", () => {
+    if (!binaryTree) return;
+    expect(binaryTree.isEmpty).toBe(true);
+    expect(binaryTree.height).toBe(0);
+
+    /** Insert multiple nodes using insertAll */
+    binaryTree.insertAll(vehicles);
+    expect(binaryTree.isEmpty).toBe(false);
+    expect(binaryTree.height).not.toBe(0);
+
+    /** Add duplicates */
+    const duplicateVehicles = vehicles.slice(2, vehicles.length);
+    binaryTree.insertAll(duplicateVehicles);
+
+    /** Verify if all nodes are present in the tree using has */
+    vehicles.forEach((v: Vehicle) => expect(binaryTree?.has(v)).toBe(true));
+
+    /** Remove all nodes from the tree using remove */
+    [...vehicles, ...duplicateVehicles].forEach((v: Vehicle) => {
+      binaryTree?.remove({ ...v });
+    });
+
+    /** Verify if all the nodes are removed from the tree using has */
+    vehicles.forEach((v: Vehicle) => expect(binaryTree?.has(v)).toBe(false));
+
+    /** Verify whether the tree is empty again and the height is zero */
     expect(binaryTree.isEmpty).toBe(true);
     expect(binaryTree.height).toBe(0);
   });
