@@ -219,7 +219,7 @@ describe("Binary Tree", () => {
     expect(binaryTree.height).toBe(0);
   });
 
-  test("Test removing nodes from a binary tree with duplicates", () => {
+  test("Removing nodes from a binary tree with duplicates", () => {
     if (!binaryTree) return;
     expect(binaryTree.isEmpty).toBe(true);
     expect(binaryTree.height).toBe(0);
