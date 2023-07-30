@@ -129,6 +129,186 @@ describe("Binary Search Tree", () => {
     );
   });
 
+  test("Pre-order traversal", () => {
+    if (!binarySearchTree) return;
+    expect(binarySearchTree.isEmpty).toBe(true);
+
+    /** Insert multiple nodes using insertAll */
+    binarySearchTree.insertAll(vehicles);
+    expect(binarySearchTree.isEmpty).toBe(false);
+
+    /** Expected pre-order ordering based on vehicle cost property */
+    const expectedPreOrder: Vehicle[] = [
+      {
+        brand: "Tata",
+        cost: 300,
+      },
+      {
+        brand: "Tesla",
+        cost: 800,
+      },
+      {
+        brand: "Mercedes",
+        cost: 550,
+      },
+      {
+        brand: "Toyota",
+        cost: 400,
+      },
+      {
+        brand: "BMW",
+        cost: 620,
+      },
+      {
+        brand: "Jeep",
+        cost: 600,
+      },
+    ];
+
+    /** Traverse and get all the nodes using pre-order traversal */
+    const preOrderValues = binarySearchTree.traverse("PRE_ORDER");
+
+    /** Verify the ordering obtained with the expected ordering */
+    preOrderValues.forEach((v: Vehicle, idx: number) => {
+      expect(v).toEqual(expectedPreOrder[idx]);
+    });
+  });
+
+  test("Post-order traversal", () => {
+    if (!binarySearchTree) return;
+    expect(binarySearchTree.isEmpty).toBe(true);
+
+    /** Insert multiple nodes using insertAll */
+    binarySearchTree.insertAll(vehicles);
+    expect(binarySearchTree.isEmpty).toBe(false);
+
+    /** Expected post-order ordering based on vehicle cost property */
+    const expectedPostOrder: Vehicle[] = [
+      {
+        brand: "Toyota",
+        cost: 400,
+      },
+      {
+        brand: "Jeep",
+        cost: 600,
+      },
+      {
+        brand: "BMW",
+        cost: 620,
+      },
+      {
+        brand: "Mercedes",
+        cost: 550,
+      },
+      {
+        brand: "Tesla",
+        cost: 800,
+      },
+      {
+        brand: "Tata",
+        cost: 300,
+      },
+    ];
+
+    /** Traverse and get all the nodes using post-order traversal */
+    const postOrderValues = binarySearchTree.traverse("POST_ORDER");
+
+    /** Verify the ordering obtained with the expected ordering */
+    postOrderValues.forEach((v: Vehicle, idx: number) => {
+      expect(v).toEqual(expectedPostOrder[idx]);
+    });
+  });
+
+  test("In-order traversal", () => {
+    if (!binarySearchTree) return;
+    expect(binarySearchTree.isEmpty).toBe(true);
+
+    /** Insert multiple nodes using insertAll */
+    binarySearchTree.insertAll(vehicles);
+    expect(binarySearchTree.isEmpty).toBe(false);
+
+    /** Expected in-order ordering based on vehicle cost property */
+    const expectedInOrder: Vehicle[] = [
+      {
+        brand: "Tata",
+        cost: 300,
+      },
+      {
+        brand: "Toyota",
+        cost: 400,
+      },
+      {
+        brand: "Mercedes",
+        cost: 550,
+      },
+      {
+        brand: "Jeep",
+        cost: 600,
+      },
+      {
+        brand: "BMW",
+        cost: 620,
+      },
+      {
+        brand: "Tesla",
+        cost: 800,
+      },
+    ];
+
+    /** Traverse and get all the nodes using in-order traversal */
+    const inOrderValues = binarySearchTree.traverse("IN_ORDER");
+
+    /** Verify the ordering obtained with the expected ordering */
+    inOrderValues.forEach((v: Vehicle, idx: number) => {
+      expect(v).toEqual(expectedInOrder[idx]);
+    });
+  });
+
+  test("Level-order traversal", () => {
+    if (!binarySearchTree) return;
+    expect(binarySearchTree.isEmpty).toBe(true);
+
+    /** Insert multiple nodes using insertAll */
+    binarySearchTree.insertAll(vehicles);
+    expect(binarySearchTree.isEmpty).toBe(false);
+
+    /** Expected level-order ordering based on vehicle cost property */
+    const expectedLevelOrder: Vehicle[] = [
+      {
+        brand: "Tata",
+        cost: 300,
+      },
+      {
+        brand: "Tesla",
+        cost: 800,
+      },
+      {
+        brand: "Mercedes",
+        cost: 550,
+      },
+      {
+        brand: "Toyota",
+        cost: 400,
+      },
+      {
+        brand: "BMW",
+        cost: 620,
+      },
+      {
+        brand: "Jeep",
+        cost: 600,
+      },
+    ];
+
+    /** Traverse and get all the nodes using level-order traversal */
+    const levelOrderValues = binarySearchTree.traverse("LEVEL_ORDER");
+
+    /** Verify the ordering obtained with the expected ordering */
+    levelOrderValues.forEach((v: Vehicle, idx: number) => {
+      expect(v).toEqual(expectedLevelOrder[idx]);
+    });
+  });
+
   test("Removal of nodes from the binary search tree using remove", () => {
     if (!binarySearchTree) return;
     expect(binarySearchTree.isEmpty).toBe(true);
