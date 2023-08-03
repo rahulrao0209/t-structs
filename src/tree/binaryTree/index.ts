@@ -32,7 +32,10 @@ export default class BinaryTree<T> extends Tree<T> {
    * Inserts a value into the tree.
    * @param {T} value
    */
-  insert(value: T): BinaryTree<T> {
+  insert(value: T, ...rest: T[]): BinaryTree<T> {
+    /** If multiple values are passed to insert, use insertAll method instead. */
+    if (rest.length > 0) return this.insertAll([value, ...rest]);
+
     const newNode = new TreeNode(value);
     let root = this.root;
 

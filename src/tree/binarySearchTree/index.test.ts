@@ -102,6 +102,25 @@ describe("Binary Search Tree", () => {
     expect(binarySearchTree.root?.value).toEqual({ ...node });
   });
 
+  test("Add multiple nodes/elements to the binary search tree using insert", () => {
+    if (!binarySearchTree) return;
+    expect(binarySearchTree.isEmpty).toBe(true);
+    expect(binarySearchTree.height).toBe(0);
+
+    /** Insert multiple nodes using the insert method */
+    binarySearchTree.insert(vehicles[0]);
+    binarySearchTree.insert(vehicles[1], vehicles[2]);
+
+    /** Verify whether all the nodes/elements have been added using has */
+    expect(binarySearchTree.isEmpty).toBe(false);
+    expect(binarySearchTree.height).not.toBe(0);
+
+    vehicles.forEach((v: Vehicle, idx: number) => {
+      if (idx > 2) return;
+      expect(binarySearchTree?.has(v)).toBe(true);
+    });
+  });
+
   test("Add multiple nodes/elements to the binary search tree using insertAll", () => {
     if (!binarySearchTree) return;
     expect(binarySearchTree.isEmpty).toBe(true);

@@ -125,6 +125,25 @@ describe("Binary Tree", () => {
     vehicles.forEach((vehicle: Vehicle) => expect(binaryTree?.has(vehicle)));
   });
 
+  test("Add multiple nodes/elements to the binary tree using insert", () => {
+    if (!binaryTree) return;
+    expect(binaryTree.isEmpty).toBe(true);
+    expect(binaryTree.height).toBe(0);
+
+    /** Insert multiple nodes using the insert method */
+    binaryTree.insert(vehicles[0]);
+    binaryTree.insert(vehicles[1], vehicles[2]);
+
+    /** Verify whether all the nodes/elements have been added using has */
+    expect(binaryTree.isEmpty).toBe(false);
+    expect(binaryTree.height).not.toBe(0);
+
+    vehicles.forEach((v: Vehicle, idx: number) => {
+      if (idx > 2) return;
+      expect(binaryTree?.has(v)).toBe(true);
+    });
+  });
+
   test("Pre-order traversal", () => {
     if (!binaryTree) return;
     expect(binaryTree.isEmpty).toBe(true);

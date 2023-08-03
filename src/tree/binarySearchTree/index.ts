@@ -29,7 +29,9 @@ export default class BinarySearchTree<T> extends Tree<T> {
     return this;
   }
 
-  insert(value: T): BinarySearchTree<T> {
+  insert(value: T, ...rest: T[]): BinarySearchTree<T> {
+    if (rest.length > 0) return this.insertAll([value, ...rest]);
+
     const newNode = new TreeNode(value);
     let root = this.root;
 
