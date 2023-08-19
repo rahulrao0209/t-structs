@@ -132,7 +132,7 @@ class DoublyLinkedList<T> {
   }
 
   /**
-   *
+   * Adds a node to the beginning of the list.
    * @param {T} value - the value of the node which is to be added.
    * @returns {DoublyLinkedList<T>} the updated list.
    */

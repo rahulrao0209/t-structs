@@ -14,17 +14,22 @@ npm install ds-ts
 
 ## API and Usage
 
-## Lists
+<details>
+  <summary style="font-size:24px">
+    List
+  </summary>
 
-## **Singly Linked List**
+  <details>
+    <summary style="font-size:18px">
+      Singly Linked List
+    </summary>
 
-### _Accessors_
+  <details>
+    <summary style="font-size:16px">
+      Accessors
+    </summary>
 
----
-
-<br />
-
-- **isEmpty** (read-only)
+    - **isEmpty** (read-only)
 
 ---
 
@@ -61,8 +66,7 @@ get tail(): _ListNode<T> | null_
 <br />
 
 - **length** (read-only)
-
----
+  </details>
 
 get length(): _number_
 
@@ -335,4 +339,8 @@ Returns an array containing all the list node values.
 an array containing all the list node values.
 <br/>
 <br/>
+
+</details>
+</details>
+
 Note - This library is a work in progress.
