@@ -101,6 +101,7 @@ class SinglyLinkedList<T> {
   }
 
   /**
+   * Remove the first node from the list.
    * @returns {ListNode<T> | undefined} the first/beginning node of the list.
    */
   shift(): ListNode<T> | undefined {
@@ -172,7 +173,7 @@ class SinglyLinkedList<T> {
   }
 
   /**
-   * Check whether an element/value exists in the heap.
+   * Check whether an element/value exists in the list.
    * @param {T} element
    * @returns {boolean}
    */

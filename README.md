@@ -342,5 +342,6 @@ an array containing all the list node values.
 
 </details>
 </details>
+_A library consisting of standard data structures implemented using TypeScript._
 
 Note - This library is a work in progress.
