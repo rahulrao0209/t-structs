@@ -55,14 +55,14 @@ describe("MaxHeap", () => {
 
   test("initially the heap is empty", () => {
     if (!maxHeap) return;
-    expect(maxHeap.isEmpty()).toBe(true);
+    expect(maxHeap.isEmpty).toBe(true);
     expect(maxHeap.size).toBe(0);
   });
 
   test("add heap values during initialization", () => {
     maxHeap = new MaxHeap<Company>(values, compare);
 
-    expect(maxHeap.isEmpty()).toBe(false);
+    expect(maxHeap.isEmpty).toBe(false);
     expect(maxHeap.size).toBe(values.length);
   });
 
@@ -103,7 +103,7 @@ describe("MaxHeap", () => {
     /**
      * Initially the heap is empty
      */
-    expect(maxHeap.isEmpty()).toBe(true);
+    expect(maxHeap.isEmpty).toBe(true);
     expect(maxHeap.size).toBe(0);
 
     /**
@@ -114,19 +114,19 @@ describe("MaxHeap", () => {
       foundingYear: "1975",
     });
 
-    expect(maxHeap.isEmpty()).toBe(false);
+    expect(maxHeap.isEmpty).toBe(false);
     expect(maxHeap.size).toBe(1);
   });
 
   test("insertAll method adds a list of elements to the heap", () => {
     maxHeap = new MaxHeap<Company>([], compare);
 
-    expect(maxHeap.isEmpty()).toBe(true);
+    expect(maxHeap.isEmpty).toBe(true);
     expect(maxHeap.size).toBe(0);
 
     /* Add a list of elements using insert all method */
     maxHeap.insertAll(values);
-    expect(maxHeap.isEmpty()).toBe(false);
+    expect(maxHeap.isEmpty).toBe(false);
     expect(maxHeap.size).toBe(values.length);
   });
 
@@ -134,7 +134,7 @@ describe("MaxHeap", () => {
     maxHeap = new MaxHeap<Company>(values, compare);
 
     const initialSize = maxHeap.size;
-    expect(maxHeap.isEmpty()).toBe(false);
+    expect(maxHeap.isEmpty).toBe(false);
     expect(maxHeap.size).toBe(values.length);
 
     expect(maxHeap.peek()).toEqual({
@@ -154,7 +154,7 @@ describe("MaxHeap", () => {
     maxHeap = new MaxHeap<Company>(values, compare);
 
     const initialSize = maxHeap.size;
-    expect(maxHeap.isEmpty()).toBe(false);
+    expect(maxHeap.isEmpty).toBe(false);
     expect(initialSize).toBe(values.length);
 
     expect(maxHeap.extract()).toEqual({
@@ -177,13 +177,13 @@ describe("MaxHeap", () => {
       foundingYear: "1975",
     });
     expect(maxHeap.size).toBe(0);
-    expect(maxHeap.isEmpty()).toBe(true);
+    expect(maxHeap.isEmpty).toBe(true);
 
     /* Check extract method for primitive values */
     const nums = [5, 24, 22, 111, 2, 6];
     const numHeap = new MaxHeap(nums);
 
-    expect(numHeap.isEmpty()).toBe(false);
+    expect(numHeap.isEmpty).toBe(false);
     expect(numHeap.size).toBe(nums.length);
 
     /* Extract all values one by one */
@@ -195,6 +195,6 @@ describe("MaxHeap", () => {
     expect(numHeap.extract()).toBe(2);
 
     expect(numHeap.size).toBe(0);
-    expect(numHeap.isEmpty()).toBe(true);
+    expect(numHeap.isEmpty).toBe(true);
   });
 });

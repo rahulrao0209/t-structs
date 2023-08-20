@@ -58,14 +58,14 @@ describe("MinHeap", () => {
 
   test("initially the heap is empty", () => {
     if (!minHeap) return;
-    expect(minHeap.isEmpty()).toBe(true);
+    expect(minHeap.isEmpty).toBe(true);
     expect(minHeap.size).toBe(0);
   });
 
   test("add heap values during initialization", () => {
     minHeap = new MinHeap<Company>(values, compare);
 
-    expect(minHeap.isEmpty()).toBe(false);
+    expect(minHeap.isEmpty).toBe(false);
     expect(minHeap.size).toBe(values.length);
   });
 
@@ -106,7 +106,7 @@ describe("MinHeap", () => {
     /**
      * Initially the heap is empty
      */
-    expect(minHeap.isEmpty()).toBe(true);
+    expect(minHeap.isEmpty).toBe(true);
     expect(minHeap.size).toBe(0);
 
     /**
@@ -117,19 +117,19 @@ describe("MinHeap", () => {
       foundingYear: "1975",
     });
 
-    expect(minHeap.isEmpty()).toBe(false);
+    expect(minHeap.isEmpty).toBe(false);
     expect(minHeap.size).toBe(1);
   });
 
   test("insertAll method adds a list of elements to the heap", () => {
     minHeap = new MinHeap<Company>([], compare);
 
-    expect(minHeap.isEmpty()).toBe(true);
+    expect(minHeap.isEmpty).toBe(true);
     expect(minHeap.size).toBe(0);
 
     /* Add a list of elements using insert all method */
     minHeap.insertAll(values);
-    expect(minHeap.isEmpty()).toBe(false);
+    expect(minHeap.isEmpty).toBe(false);
     expect(minHeap.size).toBe(values.length);
   });
 
@@ -137,7 +137,7 @@ describe("MinHeap", () => {
     minHeap = new MinHeap<Company>(values, compare);
 
     const initialSize = minHeap.size;
-    expect(minHeap.isEmpty()).toBe(false);
+    expect(minHeap.isEmpty).toBe(false);
     expect(minHeap.size).toBe(values.length);
 
     expect(minHeap.peek()).toEqual({
@@ -157,7 +157,7 @@ describe("MinHeap", () => {
     minHeap = new MinHeap<Company>(values, compare);
 
     const initialSize = minHeap.size;
-    expect(minHeap.isEmpty()).toBe(false);
+    expect(minHeap.isEmpty).toBe(false);
     expect(initialSize).toBe(values.length);
 
     expect(minHeap.extract()).toEqual({
@@ -180,13 +180,13 @@ describe("MinHeap", () => {
       foundingYear: "2002",
     });
     expect(minHeap.size).toBe(0);
-    expect(minHeap.isEmpty()).toBe(true);
+    expect(minHeap.isEmpty).toBe(true);
 
     /* Check extract method for primitive values */
     const nums = [5, 24, 22, 111, 2, 6];
     const numHeap = new MinHeap(nums);
 
-    expect(numHeap.isEmpty()).toBe(false);
+    expect(numHeap.isEmpty).toBe(false);
     expect(numHeap.size).toBe(nums.length);
 
     /* Extract all values one by one */
@@ -198,6 +198,6 @@ describe("MinHeap", () => {
     expect(numHeap.extract()).toBe(111);
 
     expect(numHeap.size).toBe(0);
-    expect(numHeap.isEmpty()).toBe(true);
+    expect(numHeap.isEmpty).toBe(true);
   });
 });
