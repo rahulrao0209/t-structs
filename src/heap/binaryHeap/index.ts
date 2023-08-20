@@ -218,7 +218,7 @@ abstract class BinaryHeap<T> {
    * Return whether the heap is empty.
    * @returns {boolean}
    */
-  isEmpty(): boolean {
+  get isEmpty(): boolean {
     return this.size === 0;
   }
 
