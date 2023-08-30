@@ -74,8 +74,10 @@ export abstract class Tree<T> {
   /**
    * Deletes the tree.
    */
-  delete(): void {
-    if (this.root) this._root = null;
+  delete(): boolean {
+    if (!this.root) return false;
+    this._root = null;
+    return true;
   }
 
   /**
