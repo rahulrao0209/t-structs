@@ -118,6 +118,30 @@ describe("MaxHeap", () => {
     expect(maxHeap.size).toBe(1);
   });
 
+  test("insert method adds multiple elements to the heap", () => {
+    /** Initialize a max-heap */
+    maxHeap = new MaxHeap<Company>([], compare);
+
+    /** Initially the heap is empty */
+    expect(maxHeap.isEmpty).toBe(true);
+    expect(maxHeap.size).toBe(0);
+
+    /** Add an element to the heap using insert */
+    maxHeap.insert({
+      name: "Notion",
+      foundingYear: "2010",
+    });
+    expect(maxHeap.isEmpty).toBe(false);
+    expect(maxHeap.size).toBe(1);
+
+    /** Add multiple elements to the heap at once using the insert method. */
+    maxHeap.insert(
+      { name: "Google", foundingYear: "1998" },
+      { name: "Microsoft", foundingYear: "1975" }
+    );
+    expect(maxHeap.size).toBe(3);
+  });
+
   test("insertAll method adds a list of elements to the heap", () => {
     maxHeap = new MaxHeap<Company>([], compare);
 

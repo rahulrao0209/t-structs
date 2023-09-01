@@ -121,6 +121,30 @@ describe("MinHeap", () => {
     expect(minHeap.size).toBe(1);
   });
 
+  test("insert method adds multiple elements to the heap", () => {
+    /** Initialize a min-heap */
+    minHeap = new MinHeap<Company>([], compare);
+
+    /** Initially the heap is empty */
+    expect(minHeap.isEmpty).toBe(true);
+    expect(minHeap.size).toBe(0);
+
+    /** Add an element to the heap using insert */
+    minHeap.insert({
+      name: "Notion",
+      foundingYear: "2010",
+    });
+    expect(minHeap.isEmpty).toBe(false);
+    expect(minHeap.size).toBe(1);
+
+    /** Add multiple elements to the heap at once using the insert method. */
+    minHeap.insert(
+      { name: "Google", foundingYear: "1998" },
+      { name: "Microsoft", foundingYear: "1975" }
+    );
+    expect(minHeap.size).toBe(3);
+  });
+
   test("insertAll method adds a list of elements to the heap", () => {
     minHeap = new MinHeap<Company>([], compare);
 

@@ -172,15 +172,18 @@ abstract class BinaryHeap<T> {
    */
   insertAll(values: T[]) {
     values.forEach((value) => this.insert(value));
+    return this.size;
   }
 
   /**
    * Insert/Add a value in the heap.
    * @param {T} value
    */
-  insert(value: T) {
+  insert(value: T, ...rest: T[]) {
+    if (rest.length) return this.insertAll([value, ...rest]);
     this.heap.push(value);
     this.swimUp();
+    return this.size;
   }
 
   /**
