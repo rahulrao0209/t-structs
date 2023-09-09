@@ -1,13 +1,13 @@
-![DS-TS](./public/ds-ts-cover.png)
+![T-Structs](./public/t-structs.png)
 
-**DS-TS** is a _TypeScript_ library consisting of _standard data structures_ provided through a simple API.
+**t-structs** is a _TypeScript_ library consisting of _standard data structures_ provided through a simple API.
 
 ## Getting Started
 
 ## Installation
 
 ```bash
-npm install ds-ts
+npm install t-structs
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install ds-ts
 **Example 1 - Using a _stack_ of numbers.**
 
 ```typescript
-import { Stack } from "ds-ts";
+import { Stack } from "t-structs";
 
 /** Initialize a new empty stack. */
 const stack = new Stack<number>();
@@ -48,8 +48,8 @@ stack.toArray(); // returns [6, 5, 11, 10, 25]
 **Example 2 - Using a _Binary Search tree_ with a complex custom data type.**
 
 ```typescript
-import { BinarySearchTree } from "ds-ts";
-import type { CompareFunc, EqualsFunc } from "ds-ts";
+import { BinarySearchTree } from "t-structs";
+import type { CompareFunc, EqualsFunc } from "t-structs";
 
 type Vehicle = {
   brand: string;
@@ -161,11 +161,11 @@ console.log(binarySearchTree.traverse()); /**
 
 ## API Reference
 
-Visit the [ds-ts](https://rb.gy/c4ruz) reference documentation page for a more comprehensive coverage of the API.
+Visit the [t-structs](https://rb.gy/c4ruz) reference documentation page for a more comprehensive coverage of the API.
 
 ## License
 
-DS-TS is offered under the [MIT License](./LICENSE).
+t-structs is offered under the [MIT License](./LICENSE).
 
 ## Note
 
