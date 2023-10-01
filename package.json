@@ -1,6 +1,6 @@
 {
   "name": "t-structs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library consisting of standard data structures implemented using TypeScript.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
